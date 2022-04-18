@@ -81,3 +81,77 @@ package.check <- lapply(packages, FUN = function(x) {
 search()
 
 ```
+# Descarga de datos
+
+```{r, include=F}
+ids <- c("a54fb175-8013-460a-a2f0-22de7a210d7a", # Ponemos los ids para 
+         "75a878a9-2bd9-4619-98ec-3224be867c65", # facilitar la descarga
+         "6fa5210b-f9c7-47c8-9d1f-ddb7568f62de",
+         "5a050cef-1107-4b3b-8e61-5daf5cfb2ca4",
+         "e580f492-a2f6-4305-af24-f4c4d05b911c",
+         "8058f1a5-c605-4baa-afff-2f638efb767f",
+         "d842601d-35b4-4b88-96f7-42e8f68e1b74",
+         "ea008906-e06a-4c72-9fe6-3238e212aae4",
+         "64e4b7b4-e633-4753-b0ef-a57d785076f8",
+         "ff8678b6-748e-4908-ab5b-9c7ff567da61",
+         "b26d42ae-2be9-481a-9b79-71392d9e80bd",
+         "1b41d86b-3939-488b-9035-92d851245924",
+         "784f4732-abc5-41b1-857b-42decb306643",
+         "3b2fe345-08fc-49d7-85c8-8cccf6a7e814")
+
+names(ids) <- c("sueca_esq_denia", # Asociamos el nombre de la calle al id
+                "cadiz16",
+                "cadiz3",
+                "cuba3",
+                "sueca2",
+                "sueca61",
+                "sueca32",
+                "carlescervera_reina",
+                "salvador",
+                "vivons",
+                "carlescervera34",
+                "puertorico21",
+                "docserrano21",
+                "gen_prim")
+
+# Registramos la latitud y longitud de la posición de los sensores
+latitude <- c(39.4628376,
+              39.4631424,
+              39.4640447,
+              39.4628861,
+              39.4633107,
+              39.4605601,
+              39.4613594,
+              39.4613005,
+              39.4635655, 
+              39.4599927,
+              39.4615883, 
+              39.4609867,
+              39.4626872,
+              39.4625622)
+
+longitude <- c(-0.37588849999997365,
+              -0.3746647000000394,
+              -0.3750515000000405,
+              -0.3775977000000239,
+              -0.3766378000000259,
+              -0.37411520000000564,
+              -0.37514680000003864,
+              -0.37288599999999406,
+              -0.37060220000000754,
+              -0.3721407000000454,
+              -0.3727962000000389,
+              -0.3761412000000064,
+              -0.3737806999999975,
+              -0.370427100000029)
+
+urls <- paste0("https://opendata.vlci.valencia.es/datastore/dump/", ids,
+               "?format=csv&bom=true")
+
+destfiles <- paste0("./data/", names(ids), ".csv")
+
+# Descargamos los archivos
+for(i in seq_along(urls)){
+   download.file(urls[i], destfiles[i])
+}
+```
