@@ -41,7 +41,3 @@ vignettes/*.pdf
 
 # other
 *.nb.html
-
-# data and figure
-/data
-/figure
