@@ -1,0 +1,83 @@
+---
+title: "Proyecto TD 2022"
+subtitle: Tratamiento de Datos. Grado en Ciencia de Datos- UV
+author: "Olaf Meneses"
+date:  "`r Sys.Date()`"
+ 
+params:
+  lang: ES
+lang: "`r switch(params$lang, ES = 'es-ES', EN = 'en-US')`"
+output:
+  html_document:
+    echo: yes
+    number_sections: yes
+    theme: lumen
+    toc: yes
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+    number_sections: yes
+  html_notebook:
+    echo: yes
+    number_sections: yes
+    toc: yes
+language:
+  label:
+    fig: 'Figura '
+    tab: 'Tabla '
+    eq: 'Ecuación '
+    thm: 'Teorema '
+    lem: 'Lema '
+    def: 'Definición '
+    cor: 'Corolario '
+    prp: 'Proposición '
+    exm: 'Ejemplo '
+    exr: 'Ejercicio '
+    proof: 'Demostración. '
+    remark: 'Nota: '
+    solution: 'Solución. '
+---
+
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# CONFIGURACIÓN GENERAL
+library(knitr)
+options(width = 100)
+# Opciones generales chunks
+opts_chunk$set(echo=T,message = F, error = F, warning = F, comment = NA, 
+               fig.align = 'center', dpi = 100, tidy = F, 
+               cache.path = '.cache/', fig.path = './figure/')
+
+#options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+#knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+```{r, echo=F, include=F}
+# Especificamos las librerías necesarias en esta lista
+
+packages = c("knitr","tidyverse", "lubridate", "magrittr", "leaflet", "shiny",
+             "shinythemes", "GGally", "forcats", "ggridges", "viridis", "naniar")
+
+# Función que comprueba si tenemos instalado un paquete
+# Si está instalado, lo carga
+# Si no, lo instala y lo carga
+
+package.check <- lapply(packages, FUN = function(x) {
+  if (!require(x, character.only = TRUE)) {
+    install.packages(x, dependencies = TRUE)
+    library(x, character.only = TRUE)
+  }
+})
+
+# Mostrar los paquetes cargados
+search()
+
+```
