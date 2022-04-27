@@ -163,9 +163,7 @@ for(i in seq_along(ids)){
   assign(names(ids)[i],
          read_csv(destfiles[i],
                   col_types = cols(dateObserved = col_date(format = "%Y-%m-%d"))) %>% 
-           mutate(street = names(ids)[i],
-                  latitude = latitude[i],
-                  longitude = longitude[i]))
+           mutate(street = names(ids)[i]))
 }
 
 # Creamos un dataframe que reúna los datos de todas las calles
@@ -191,7 +189,7 @@ all_df %<>%
 # si el sensor de esa calle no registró los valores de esa fecha.
 tidy_data <- all_df  %>% 
   arrange(dateObserved) %>% 
-  complete(dateObserved, nesting(street, entityId, latitude, longitude))
+  complete(dateObserved, nesting(street, entityId))
 
 # Visualizamos los datos faltantes
 vis_miss(tidy_data)
