@@ -81,6 +81,11 @@ package.check <- lapply(packages, FUN = function(x) {
 search()
 
 ```
+# Introducción
+Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situados en distintas calles del barrio de Ruzafa. A través de la visualización de distintas tablas y gráficos, veremos que los niveles de ruido son ciertamente elevados e intentaremos determinar por qué se dan estos niveles. Para ello, plantearemos preguntas que habremos de resolver con los datos, mediante distintas y variadas visualizaciones. 
+
+Los datos han sido obtenidos del portal de datos abiertos del Ayuntamiento de Valencia: https://www.valencia.es/dadesobertes/es/data/?groups=medio-ambiente
+
 # Descarga de datos
 
 ```{r, include=F}
