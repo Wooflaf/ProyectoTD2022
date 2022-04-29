@@ -64,7 +64,8 @@ knit_hooks$set(inline = function(x) {
 # Especificamos las librerías necesarias en esta lista
 
 packages = c("knitr","tidyverse", "lubridate", "magrittr", "leaflet", "shiny",
-             "shinythemes", "GGally", "forcats", "ggridges", "viridis", "naniar")
+             "shinythemes", "GGally", "forcats", "ggridges", "viridis", "naniar",
+             "skimr")
 
 # Función que comprueba si tenemos instalado un paquete
 # Si está instalado, lo carga
@@ -192,6 +193,11 @@ all_df %<>%
   select(-`_id`:-entityType) %>% 
   mutate(entityId = factor(entityId),
          street = factor(street))
+```
+## Valores erroneos
+Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erroneos, o que faltan.
+```{r}
+skim(all_df)
 ```
 
 ```{r}
