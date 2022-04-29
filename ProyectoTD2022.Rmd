@@ -185,15 +185,16 @@ rm(sueca_esq_denia, cadiz16, cadiz3, cuba3, sueca2, sueca61,
    sueca32, carlescervera_reina, salvador, vivons, carlescervera34,
    puertorico21, docserrano21, gen_prim)
 ```
-
+# Limpiado del dataframe
+Seleccionamos las variables que nos interesan y transformamos las variables al tipo de variable que corresponda.
 ```{r}
-# Seleccionamos las variables que nos interesan y transformamos a factor
-# aquellas variables que deberían serlo.
 all_df %<>%
   select(-`_id`:-entityType) %>% 
   mutate(entityId = factor(entityId),
          street = factor(street))
+```
 
+```{r}
 # Creamos un dataframe que incluya todas las fechas y que complete con NAs
 # si el sensor de esa calle no registró los valores de esa fecha.
 tidy_data <- all_df  %>% 
