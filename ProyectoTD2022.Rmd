@@ -210,13 +210,17 @@ all_df %<>%
   filter(if_all(starts_with("LA"), ~ is.finite(.x) & .x > 0))
 ```
 
+# Visualización de registros faltantes
+Hemos hecho un dataframe donde para cada día que hay registro de datos para al menos un sensor, completamos para el resto de sensores con valores `NA`. Esto nos permitirá visualizar los registros faltantes.
 ```{r}
 # Creamos un dataframe que incluya todas las fechas y que complete con NAs
 # si el sensor de esa calle no registró los valores de esa fecha.
-tidy_data <- all_df  %>% 
+complete_data <- all_df  %>% 
   arrange(dateObserved) %>% 
   complete(dateObserved, nesting(street, entityId))
+```
 
+```{r}
 # Visualizamos los datos faltantes
 vis_miss(tidy_data)
 # Observamos que de los registros que faltan, todas las variables relacionadas con el sonido están incompletas. Esto quiere decir que hay días en los que algunos sensores no han hecho ningún registro. Asimismo, para los días que hay registro, todas las variables están completas.
