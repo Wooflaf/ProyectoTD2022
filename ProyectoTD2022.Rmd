@@ -255,3 +255,27 @@ ggplot(complete_data,
 En este el ultimo gráfico podemos ver qué días no hay registros para cada sensor.
 
 Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro `salvador`); es posible que se deba a que se colocasen más tarde. El más interesante puede ser el caso de `sueca2`, donde hay una gran falta de registros y a partir de un cierto día, ya no se registran más. Desconocemos la razón por la que este sensor no registra más datos.
+
+```{r carles, child = c('ProyectoTD2022_carles.Rmd'), eval = F}
+
+```
+
+```{r lucia, child = c('ProyectoTD2022_lucia.Rmd'), eval = F}
+
+```
+
+```{r luna, child = c('ProyectoTD2022_luna.Rmd'), eval = F}
+
+```
+
+```{r olaf, child = c('ProyectoTD2022_olaf.Rmd'), eval = F}
+
+```
+
+```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = F}
+
+```
+
+```{r wilson, child = c('ProyectoTD2022_wilson.Rmd'), eval = F}
+
+```
