@@ -1,7 +1,7 @@
 ---
 title: "Proyecto TD 2022"
 subtitle: Tratamiento de Datos. Grado en Ciencia de Datos- UV
-author: "Olaf Meneses"
+author: "Olaf Meneses, Rubén Sales"
 date:  "`r Sys.Date()`"
  
 params:
@@ -37,7 +37,6 @@ language:
     remark: 'Nota: '
     solution: 'Solución. '
 ---
-
 
 ```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
 # CONFIGURACIÓN GENERAL
@@ -82,15 +81,19 @@ package.check <- lapply(packages, FUN = function(x) {
 search()
 
 ```
-# Introducción
-Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situados en distintas calles del barrio de Ruzafa. A través de la visualización de distintas tablas y gráficos, veremos que los niveles de ruido son ciertamente elevados e intentaremos determinar por qué se dan estos niveles. Para ello, plantearemos preguntas que habremos de resolver con los datos, mediante distintas y variadas visualizaciones. 
 
-Los datos han sido obtenidos del portal de datos abiertos del Ayuntamiento de Valencia: https://www.valencia.es/dadesobertes/es/data/?groups=medio-ambiente
+# Introducción
+
+Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situados en distintas calles del barrio de Ruzafa. A través de la visualización de distintas tablas y gráficos, veremos que los niveles de ruido son ciertamente elevados e intentaremos determinar por qué se dan estos niveles. Para ello, plantearemos preguntas que habremos de resolver con los datos, mediante distintas y variadas visualizaciones.
+
+Los datos han sido obtenidos del portal de datos abiertos del Ayuntamiento de Valencia: <https://www.valencia.es/dadesobertes/es/data/?groups=medio-ambiente>
 
 # Descarga de datos
+
 Para descargar los datos, hemos optado por automatizar la descarga, ya que cada día se añade un nuevo registro. Para ello, hemos obtenido los identificadores y con estos hemos podido automatizar el proceso.
 
 Asimismo, hemos obtenido la longitud y latitud de los sonómetros (información presente en la página correspondiente a cada sensor), ya que puede sernos de interés para realizar una visualización geográfica.
+
 ```{r}
 ids <- c("a54fb175-8013-460a-a2f0-22de7a210d7a", # Ponemos los ids para 
          "75a878a9-2bd9-4619-98ec-3224be867c65", # facilitar la descarga
@@ -163,10 +166,13 @@ for(i in seq_along(urls)){
    download.file(urls[i], destfiles[i])
 }
 ```
+
 # Carga de datos
-Para los datos de cada sensor, los hemos almacenado en dataframes independientes.  Además hemos añadido una columna con el nombre abreviado de la calle donde se ubica cada uno, para una más fácil identificación.
+
+Para los datos de cada sensor, los hemos almacenado en dataframes independientes. Además hemos añadido una columna con el nombre abreviado de la calle donde se ubica cada uno, para una más fácil identificación.
 
 Posteriormente, como todos los dataframes comparten las mismas variables (columnas), hemos unido todos los registros en un solo dataframe.
+
 ```{r}
 # Asignamos a cada nombre de calle el dataframe que corresponde a sus datos.
 for(i in seq_along(ids)){
@@ -186,32 +192,44 @@ rm(sueca_esq_denia, cadiz16, cadiz3, cuba3, sueca2, sueca61,
    sueca32, carlescervera_reina, salvador, vivons, carlescervera34,
    puertorico21, docserrano21, gen_prim)
 ```
+
 # Limpiado del dataframe
+
 Seleccionamos las variables que nos interesan y transformamos las variables al tipo de variable que corresponda.
+
 ```{r}
 all_df %<>%
   select(-`_id`:-entityType) %>% 
   mutate(entityId = factor(entityId),
          street = factor(street))
 ```
+
 ## Valores erróneos
+
 Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erróneos, o que faltan.
+
 ```{r}
 skim(all_df)
 ```
+
 Observamos que no hay valores faltantes (`n_missing`). Lo interesante de aquí es que hay valores infinitos en algunas variables numéricas. El resto de variables parecen no contener errores. Procedemos a identificar estos registros.
+
 ```{r}
 all_df %>% # Veamos si hay valores que no son posibles
   filter(if_any(starts_with("LA"), ~ !is.finite(.x) | .x <= 0))
 ```
+
 Hay dos registros que tienen valores infinitos en alguna variable. Esto es imposible y, por tanto, erróneo. El resto de valores parecen estar bien registrados, podríamos cambiar el infinito por NA. No obstante, como la proporción es muy baja (2 registros de 6684), lo que haremos sera eliminarlos directamente.
+
 ```{r}
 all_df %<>%
   filter(if_all(starts_with("LA"), ~ is.finite(.x) & .x > 0))
 ```
 
 # Visualización de registros faltantes
+
 Hemos hecho un dataframe donde para cada día que hay registro de datos para al menos un sensor, completamos para el resto de sensores con valores `NA`. Esto nos permitirá visualizar los registros faltantes.
+
 ```{r}
 # Creamos un dataframe que incluya todas las fechas y que complete con NAs
 # si el sensor de esa calle no registró los valores de esa fecha.
@@ -224,7 +242,9 @@ complete_data <- all_df  %>%
 # Visualizamos los datos faltantes
 vis_miss(complete_data)
 ```
+
 Observamos que de los registros que faltan, todas las variables relacionadas con el sonido están incompletas (pues así lo hemos completado nosotros). Esto quiere decir que hay días en los que algunos sensores no han hecho ningún registro. Asimismo, vemos que para los días que hay registro, todas las variables están completas. Como ya vimos en el resumen generado en el apartado anterior.
+
 ```{r}
 # Tabla que muestra la calle donde se sitúa el sensor y la cantidad de días
 # sin datos registrados
@@ -239,7 +259,9 @@ complete_data %>%
        title = "Número de registros faltantes por sensor") +
   theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90))
 ```
+
 También hemos contabilizado cuántos días no tienen registros los sensores con al menos un registro faltante. Hay una gran diferencia entre el sensor de `sueca2` y los demás. En el siguiente gráfico a este podremos visualizarlo de otra forma que nos proporcionara mas información.
+
 ```{r}
 # Gráfico que muestra los valores de LAeq (en azul) según la fecha para cada calle
 # y en rojo los días que no hubo registro.
@@ -252,6 +274,7 @@ ggplot(complete_data,
   theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90)) +
   scale_color_discrete(name = "Datos faltantes", labels = c("Faltante", "No Faltante"))
 ```
+
 En este el ultimo gráfico podemos ver qué días no hay registros para cada sensor.
 
 Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro `salvador`); es posible que se deba a que se colocasen más tarde. El más interesante puede ser el caso de `sueca2`, donde hay una gran falta de registros y a partir de un cierto día, ya no se registran más. Desconocemos la razón por la que este sensor no registra más datos.
