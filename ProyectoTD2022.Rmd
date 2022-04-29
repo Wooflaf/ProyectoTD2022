@@ -87,8 +87,10 @@ Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situ
 Los datos han sido obtenidos del portal de datos abiertos del Ayuntamiento de Valencia: https://www.valencia.es/dadesobertes/es/data/?groups=medio-ambiente
 
 # Descarga de datos
+Para descargar los datos, hemos optado por automatizar la descarga, ya que cada día se añade un nuevo registro. Para ello, hemos obtenido los identificadores y con estos hemos podido automatizar el proceso.
 
-```{r, include=F}
+Asimismo, hemos obtenido la longitud y latitud de los sonómetros (información presente en la página correspondiente a cada sensor), ya que puede sernos de interés para realizar una visualización geográfica.
+```{r}
 ids <- c("a54fb175-8013-460a-a2f0-22de7a210d7a", # Ponemos los ids para 
          "75a878a9-2bd9-4619-98ec-3224be867c65", # facilitar la descarga
          "6fa5210b-f9c7-47c8-9d1f-ddb7568f62de",
