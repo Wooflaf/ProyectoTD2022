@@ -40,4 +40,6 @@ vignettes/*.pdf
 *.Renviron
 
 # other
+*.html
 *.nb.html
+figure/
