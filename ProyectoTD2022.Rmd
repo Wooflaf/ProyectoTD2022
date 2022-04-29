@@ -222,12 +222,13 @@ complete_data <- all_df  %>%
 
 ```{r}
 # Visualizamos los datos faltantes
-vis_miss(tidy_data)
-# Observamos que de los registros que faltan, todas las variables relacionadas con el sonido están incompletas. Esto quiere decir que hay días en los que algunos sensores no han hecho ningún registro. Asimismo, para los días que hay registro, todas las variables están completas.
-
+vis_miss(complete_data)
+```
+Observamos que de los registros que faltan, todas las variables relacionadas con el sonido están incompletas (pues así lo hemos completado nosotros). Esto quiere decir que hay días en los que algunos sensores no han hecho ningún registro. Asimismo, vemos que para los días que hay registro, todas las variables están completas. Como ya vimos en el resumen generado en el apartado anterior.
+```{r}
 # Tabla que muestra la calle donde se sitúa el sensor y la cantidad de días
 # sin datos registrados
-tidy_data %>% 
+complete_data %>% 
   filter(is.na(LAeq)) %>% 
   count(street) %>%
   ggplot(aes(x = fct_reorder(street, n), n)) +
@@ -237,10 +238,12 @@ tidy_data %>%
   labs(x = "Calle", y = "Registros faltantes", 
        title = "Número de registros faltantes por sensor") +
   theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90))
-
+```
+También hemos contabilizado cuántos días no tienen registros los sensores con al menos un registro faltante. Hay una gran diferencia entre el sensor de `sueca2` y los demás. En el siguiente gráfico a este podremos visualizarlo de otra forma que nos proporcionara mas información.
+```{r}
 # Gráfico que muestra los valores de LAeq (en azul) según la fecha para cada calle
 # y en rojo los días que no hubo registro.
-ggplot(tidy_data,
+ggplot(complete_data,
        aes(x = dateObserved,
            y = LAeq)) +
  geom_miss_point(alpha = 0.4) +
@@ -249,3 +252,6 @@ ggplot(tidy_data,
   theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90)) +
   scale_color_discrete(name = "Datos faltantes", labels = c("Faltante", "No Faltante"))
 ```
+En este el ultimo gráfico podemos ver qué días no hay registros para cada sensor.
+
+Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro `salvador`); es posible que se deba a que se colocasen más tarde. El más interesante puede ser el caso de `sueca2`, donde hay una gran falta de registros y a partir de un cierto día, ya no se registran más. Desconocemos la razón por la que este sensor no registra más datos.
