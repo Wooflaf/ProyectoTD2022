@@ -163,7 +163,9 @@ for(i in seq_along(urls)){
 }
 ```
 # Carga de datos
+Para los datos de cada sensor, los hemos almacenado en dataframes independientes.  Además hemos añadido una columna con el nombre abreviado de la calle donde se ubica cada uno, para una más fácil identificación.
 
+Posteriormente, como todos los dataframes comparten las mismas variables (columnas), hemos unido todos los registros en un solo dataframe.
 ```{r}
 # Asignamos a cada nombre de calle el dataframe que corresponde a sus datos.
 for(i in seq_along(ids)){
