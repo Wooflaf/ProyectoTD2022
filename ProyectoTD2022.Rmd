@@ -194,10 +194,20 @@ all_df %<>%
   mutate(entityId = factor(entityId),
          street = factor(street))
 ```
-## Valores erroneos
-Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erroneos, o que faltan.
+## Valores erróneos
+Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erróneos, o que faltan.
 ```{r}
 skim(all_df)
+```
+Observamos que no hay valores faltantes (`n_missing`). Lo interesante de aquí es que hay valores infinitos en algunas variables numéricas. El resto de variables parecen no contener errores. Procedemos a identificar estos registros.
+```{r}
+all_df %>% # Veamos si hay valores que no son posibles
+  filter(if_any(starts_with("LA"), ~ !is.finite(.x) | .x <= 0))
+```
+Hay dos registros que tienen valores infinitos en alguna variable. Esto es imposible y, por tanto, erróneo. El resto de valores parecen estar bien registrados, podríamos cambiar el infinito por NA. No obstante, como la proporción es muy baja (2 registros de 6684), lo que haremos sera eliminarlos directamente.
+```{r}
+all_df %<>%
+  filter(if_all(starts_with("LA"), ~ is.finite(.x) & .x > 0))
 ```
 
 ```{r}
