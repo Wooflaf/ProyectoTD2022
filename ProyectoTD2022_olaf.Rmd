@@ -63,3 +63,4 @@ all_df_ubi_median[1:8] %>%
   pack_rows("Nivel 2", 7, 11, background = "red", color = "white") %>% 
   pack_rows("Nivel 1", 12, 14, background = "salmon", color = "white")
 ```
+Utilizaremos este dataframe para la visualización geográfica. Notar que se muestran ya los diferentes niveles establecidos. La diferenciación entre ellos son los valores de la mediana de la variable `LAeq`. El nivel 3 es para valores mayores de 60.8, el nivel 2 si los valores están entre 59 y 60.8 y finalmente, el nivel 1, es para valores menores de 59.
