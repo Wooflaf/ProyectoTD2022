@@ -101,10 +101,27 @@ leaflet() %>%
   addProviderTiles("Esri") %>%
   addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
                     clusterOptions = markerClusterOptions(), # Agrupación de marcadores
-                    icon = icon_hosteleria) %>% 
+                    icon = icon_hosteleria,
+                    label = ~name,
+                    popup = paste0(
+                      "<b> Nombre: </b>",
+                      hosteleria$name,
+                      "<br>",
+                      "<b> Categoría: </b>",
+                      hosteleria$Category,
+                      "<br>",
+                      "<b> Dirección: </b>",
+                      hosteleria$Address)) %>% 
   setView(lng = median(hosteleria$Longitude), # Vista inicial: mediana de lats y longs para que esté 'centrada'
           lat = median(hosteleria$Latitude), zoom = 16) %>%
   addAwesomeMarkers(data = all_df_ubi_median, lng = ~longitude, lat = ~latitude, # Marcadores sonómetros
                     icon = ~icon_sonometro[nivel],
-                    label = ~street)
+                    label = ~street,
+                    group = "sonometros",
+                    popup = paste0(
+                      "<b> Nombre: </b>",
+                      all_df_ubi_median$street,
+                      "<br>",
+                      "<b> Mediana LAeq: </b>",
+                      all_df_ubi_median$median_LAeq))
 ```
