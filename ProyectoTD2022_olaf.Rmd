@@ -1,3 +1,9 @@
-```{r}
+# ¿Influye la presencia de bares y restaurantes en los niveles de ruido registrados?
+Según un [estudio de concentración de locales en el barrio de Ruzafa](http://www.valencia.es/ayuntamiento/urbanismo2.nsf/0/A577FFDD7E036298C1257D180037E247/$FILE/MODIFICACI%C3%93%20DE%20LES%20NORMES%20URBAN%C3%8DSTIQUES%20DEL%20PLA%20ESPECIAL%20DE%20RUSSAFA-SUD%20GRAN%20VIA%20(PEP-2).pdf?OpenElement?d&embedded=true), realizado por el Ayuntamiento de Valencia en Mayo de 2014, el número total de bares y restaurantes era de 277; 11.37 bares por cada 1000 habitantes del barrio de Ruzafa, es decir, 1.96 veces la media de la ciudad en esas fechas.
+
+Por eso mismo creemos que influirá mucho en los niveles de ruido registrados. Lo comprobaremos haciendo uso de los datos, mediante una visualización geográfica de la ubicación de los sonómetros, bares y restaurantes. Pero, ¿cómo obtener sus respectivas ubicaciones? ¿Qué bares hay en Ruzafa? 
+
+Lo que hemos realizado es obtener mediante web scraping la información de estos servicios de hostelería. Los datos han sido extraídos de Google Maps, datos que se pueden obtener haciendo las búsquedas de 'restaurantes ruzafa' y 'bares ruzafa'. No creemos haber conseguido la totalidad de servicios, pero sí los suficientes como para hacer una buena representación.
+```{r load hosteleria}
 
 ```
