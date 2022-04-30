@@ -5,5 +5,12 @@ Por eso mismo creemos que influirá mucho en los niveles de ruido registrados. L
 
 Lo que hemos realizado es obtener mediante web scraping la información de estos servicios de hostelería. Los datos han sido extraídos de Google Maps, datos que se pueden obtener haciendo las búsquedas de 'restaurantes ruzafa' y 'bares ruzafa'. No creemos haber conseguido la totalidad de servicios, pero sí los suficientes como para hacer una buena representación.
 ```{r load hosteleria}
+# Carga de datos de bares y restaurantes
+bares <- read_delim("./data/bares_ruzafa.csv", delim = "\t", 
+                    escape_double = FALSE, trim_ws = TRUE) %>% 
+  rename_with(function(x){x <- "name"}, starts_with("Name"))
 
+restaurantes <- read_delim("./data/restaurantes_ruzafa.csv", delim = "\t", 
+                           escape_double = FALSE, trim_ws = TRUE) %>% 
+  rename_with(function(x){x <- "name"}, starts_with("Name"))
 ```
