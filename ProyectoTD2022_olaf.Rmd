@@ -14,3 +14,16 @@ restaurantes <- read_delim("./data/restaurantes_ruzafa.csv", delim = "\t",
                            escape_double = FALSE, trim_ws = TRUE) %>% 
   rename_with(function(x){x <- "name"}, starts_with("Name"))
 ```
+Haremos un limpiado básico de los datos para que se adecúen a aquello que buscamos.
+```{r clean hosteleria}
+# Filtraremos los posibles duplicados
+mismos_locales <- base::intersect(bares$name, restaurantes$name) 
+
+hosteleria <- bind_rows(bares, 
+                        restaurantes %>% filter(!(name %in% mismos_locales))) %>% 
+  select(name, Category, domingo:sábado, Address, Latitude, Longitude) %>% # Variables de posible interés
+  filter(between(Longitude, -0.38, -0.368) & between(Latitude, 39.458, 39.465)) %>% 
+  filter(!(Category %in% c("Mercado", "Iglesia Católica", "Salón de manicura y pedicura")))
+# Filtramos los servicios de hostelería en un rectángulo concreto.
+# Eliminamos categorías que no se corresponden con servicios de hostelería.
+```
