@@ -64,3 +64,47 @@ all_df_ubi_median[1:8] %>%
   pack_rows("Nivel 1", 12, 14, background = "salmon", color = "white")
 ```
 Utilizaremos este dataframe para la visualización geográfica. Notar que se muestran ya los diferentes niveles establecidos. La diferenciación entre ellos son los valores de la mediana de la variable `LAeq`. El nivel 3 es para valores mayores de 60.8, el nivel 2 si los valores están entre 59 y 60.8 y finalmente, el nivel 1, es para valores menores de 59.
+
+```{r icons}
+# Definimos los iconos que tendrán los sensores y los servicios de hostelería
+icon_hosteleria <- makeAwesomeIcon(
+  icon = "cutlery",
+  iconColor = "black",
+  markerColor = "orange",
+  library = "fa"
+)
+
+icon_sonometro <- awesomeIconList(
+  "Nivel 3" = makeAwesomeIcon(
+    icon = "volume-up",
+    iconColor = "black",
+    markerColor = "darkred",
+    library = "fa"
+  ),
+  "Nivel 2" = makeAwesomeIcon(
+    icon = "volume-up",
+    iconColor = "black",
+    markerColor = "red",
+    library = "fa"
+  ),
+  "Nivel 1" = makeAwesomeIcon(
+    icon = "volume-up",
+    iconColor = "black",
+    markerColor = "lightred",
+    library = "fa"
+  )
+)
+```
+
+```{r leaflet}
+leaflet() %>%
+  addProviderTiles("Esri") %>%
+  addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
+                    clusterOptions = markerClusterOptions(), # Agrupación de marcadores
+                    icon = icon_hosteleria) %>% 
+  setView(lng = median(hosteleria$Longitude), # Vista inicial: mediana de lats y longs para que esté 'centrada'
+          lat = median(hosteleria$Latitude), zoom = 16) %>%
+  addAwesomeMarkers(data = all_df_ubi_median, lng = ~longitude, lat = ~latitude, # Marcadores sonómetros
+                    icon = ~icon_sonometro[nivel],
+                    label = ~street)
+```
