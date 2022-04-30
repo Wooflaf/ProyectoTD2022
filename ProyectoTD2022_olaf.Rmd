@@ -27,3 +27,11 @@ hosteleria <- bind_rows(bares,
 # Filtramos los servicios de hostelería en un rectángulo concreto.
 # Eliminamos categorías que no se corresponden con servicios de hostelería.
 ```
+```{r} 
+glimpse(hosteleria) # Estructura del dataframe final 
+```
+Tenemos un total de 226 registros de servicios de hostelería y su correspondiente información.
+```{r}
+vis_miss(hosteleria)
+```
+Observamos que solo faltan datos en las variables que corresponden a los horarios. No utilizaremos por ahora esa información, por lo que no es importante que falten esos datos. Podemos proceder a visualizarlos.
