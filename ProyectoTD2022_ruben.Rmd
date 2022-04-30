@@ -44,7 +44,28 @@ no_e_alarma<-complete_data %>%
 full_join(e_alarma, no_e_alarma)
 ```
 
+Fuente de las fechas: <https://es.wikipedia.org/wiki/Confinamiento_por_la_pandemia_de_COVID-19_en_Espa%C3%B1a#Segundo_estado_de_alarma_nacional>.
+
 ## El efecto de las Fallas
 
 ```{r}
+dates_vline<-ymd(c("2021-09-01", "2021-09-05"))
+# FALLAS 2021, FIN FALLAS 2021
+
+for(calle in names(ids)){
+  print(ggplot(complete_data %>% 
+          filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
+          facet_wrap(~street) +
+          labs(x = "Fecha", title = "Datos diurnos sensor") +
+          theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90)) +
+          geom_line() +
+          geom_vline(xintercept = dates_vline, col = "red", lwd = 1) +
+          geom_text(aes(dates_vline[1], 71.5, label = "Inicio Fallas",
+                        vjust = -1, angle = 90)) +
+          geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1.5,
+                        angle = 90)) +
+          scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")) +
+          xlim(ymd(c("2021-08-21", "2021-09-18"))))}
 ```
+
+Fuente de las fechas: <https://www.antena3.com/noticias/sociedad/programa-fallas-2021-fechas-horarios-fallas-valencia_20210901612f3d63426181000132ad0c.html>.
