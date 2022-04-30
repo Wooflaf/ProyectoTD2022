@@ -52,4 +52,14 @@ all_df_ubi_median <- complete_data %>%
                            median_LAeq < 59 ~ "Nivel 1")) %>% 
   arrange(desc(median_LAeq)) %>% 
   ungroup()
+
+# ELIMINAR
+library(kableExtra)
+
+all_df_ubi_median[1:8] %>% 
+  kbl() %>%
+  kable_material(full_width = F) %>% 
+  pack_rows("Nivel 3", 1, 6, background = "darkred", color = "white") %>% 
+  pack_rows("Nivel 2", 7, 11, background = "red", color = "white") %>% 
+  pack_rows("Nivel 1", 12, 14, background = "salmon", color = "white")
 ```
