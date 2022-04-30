@@ -35,3 +35,13 @@ Tenemos un total de 226 registros de servicios de hostelería y su correspondien
 vis_miss(hosteleria)
 ```
 Observamos que solo faltan datos en las variables que corresponden a los horarios. No utilizaremos por ahora esa información, por lo que no es importante que falten esos datos. Podemos proceder a visualizarlos.
+
+```{r leaflet}
+lat_ord2 <- latitude[order(names(ids))]
+lon_ord2 <- longitude[order(names(ids))]
+# Dataframe con las ubicaciones de los sonómetros
+all_df_ubi <- complete_data %>% 
+  mutate(latitude = rep(lat_ord, nrow(complete_data)/length(ids)),
+         longitude = rep(lon_ord, nrow(complete_data)/length(ids))) %>% 
+  filter(if_all(everything(), ~!is.na(.x)))
+```
