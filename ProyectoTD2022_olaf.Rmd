@@ -36,12 +36,20 @@ vis_miss(hosteleria)
 ```
 Observamos que solo faltan datos en las variables que corresponden a los horarios. No utilizaremos por ahora esa información, por lo que no es importante que falten esos datos. Podemos proceder a visualizarlos.
 
-```{r leaflet}
-lat_ord2 <- latitude[order(names(ids))]
-lon_ord2 <- longitude[order(names(ids))]
-# Dataframe con las ubicaciones de los sonómetros
-all_df_ubi <- complete_data %>% 
+```{r df_ubi}
+lat_ord <- latitude[order(names(ids))]
+lon_ord <- longitude[order(names(ids))]
+
+# Dataframe con las ubicaciones y las medianas (según el sensor) de las variables relacionadas con el sonido 
+all_df_ubi_median <- complete_data %>% 
   mutate(latitude = rep(lat_ord, nrow(complete_data)/length(ids)),
          longitude = rep(lon_ord, nrow(complete_data)/length(ids))) %>% 
-  filter(if_all(everything(), ~!is.na(.x)))
+  filter(if_all(everything(), ~!is.na(.x))) %>%
+  group_by(street, latitude, longitude) %>% 
+  summarise(across(starts_with("LA"), ~median(.x), .names = "median_{.col}")) %>% 
+  mutate(nivel = case_when(median_LAeq >= 60.8 ~ "Nivel 3", # Etiquetas para clasificar los más y menos ruidosos
+                           median_LAeq < 60.8 & median_LAeq >= 59 ~ "Nivel 2",
+                           median_LAeq < 59 ~ "Nivel 1")) %>% 
+  arrange(desc(median_LAeq)) %>% 
+  ungroup()
 ```
