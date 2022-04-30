@@ -13,19 +13,35 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 dates_vline<-ymd(c("2020-10-25", "2021-05-09"))
-# ESTADO DE ALARMA NACIONAL 2, FIN ESTADO DE ALARMA
+# ESTADO DE ALARMA NACIONAL 2, FIN ESTADO DE ALARMA NACIONAL 2
 
 for(calle in names(ids)){
-  print(ggplot(all_df %>% 
-                 filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
+  print(ggplot(complete_data %>% 
+          filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
           facet_wrap(~street) +
-          labs(x = "Fecha", title = "Datos sensor") +
+          labs(x = "Fecha", title = "Datos nocturnos sensor") +
           theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90)) +
           geom_line() +
           geom_vline(xintercept = dates_vline, col = "red", lwd = 1) +
-          geom_text(aes(dates_vline[1], 71.5, label = "Estado de Alarma", vjust = 1, angle = 90)) +
-          geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1, angle = 90)) +
+          geom_text(aes(dates_vline[1], 71.5, label = "Estado de Alarma",
+                        vjust = 1, angle = 90)) +
+          geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1,
+                        angle = 90)) +
           scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")))}
+```
+
+```{r}
+e_alarma<-complete_data %>%
+  group_by(street) %>%
+  filter(dates_vline[1]<dateObserved & dateObserved<dates_vline[2]) %>%
+  summarise(Media_E_Alarma = mean(LAeq_n, na.rm = T))
+
+no_e_alarma<-complete_data %>%
+  group_by(street) %>%
+  filter(dateObserved<dates_vline[1] | dates_vline[2]<dateObserved) %>%
+  summarise(Media_Resto = mean(LAeq_n, na.rm = T))
+
+full_join(e_alarma, no_e_alarma)
 ```
 
 ## El efecto de las Fallas
