@@ -100,6 +100,14 @@ icon_sonometro <- awesomeIconList(
 # ELIMINAR
 library(leaflet.extras)
 
+all_df_ubi_median <- all_df_ubi_median %>% # Variable scaled: median_LAeq entre 0 y 1
+  mutate(scaled = (median_LAeq - min(median_LAeq))/(max(median_LAeq)-min(median_LAeq)))
+
+# Ponemos la variable entre 0 y 1 para poder aplicarle una paleta de colores
+color_pal <- colorNumeric(palette = colorRamp(c("#FDD49E", "#7F0000"), 
+                                              interpolate="spline"),
+                          all_df_ubi_median$scaled)
+
 leaflet() %>%
   addProviderTiles("Esri") %>%
   addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
@@ -127,6 +135,11 @@ leaflet() %>%
                       "<br>",
                       "<b> Mediana LAeq: </b>",
                       all_df_ubi_median$median_LAeq)) %>% 
+  addCircleMarkers(data = all_df_ubi_median, lng = ~longitude, lat = ~latitude,
+                   radius = ~3*sqrt(median_LAeq),
+                   opacity = 0.8,
+                   color = ~color_pal(scaled),
+                   fillOpacity = 0.6) %>% 
   addLegend(position = "bottomright", # Añadimos una leyenda orientativa
             labels = c("Nivel 3", "Nivel 2", "Nivel 1"), 
             colors = c("darkred", "red", "salmon"),
