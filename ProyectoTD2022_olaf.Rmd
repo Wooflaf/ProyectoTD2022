@@ -134,7 +134,7 @@ leaflet() %>%
                       all_df_ubi_median$street,
                       "<br>",
                       "<b> Mediana LAeq: </b>",
-                      all_df_ubi_median$median_LAeq)) %>% 
+                      all_df_ubi_median$median_LAeq, " dB")) %>% 
   addCircleMarkers(data = all_df_ubi_median, lng = ~longitude, lat = ~latitude,
                    radius = ~3*sqrt(median_LAeq),
                    opacity = 0.8,
@@ -148,3 +148,16 @@ leaflet() %>%
   addResetMapButton() %>% # Botón para poder volver a la vista inicial
   addSearchFeatures(targetGroups = "sonometros") # Botón de búsqueda de sonómetro
 ```
+Gracias a esta visualización podemos observar claramente que los sensores que tienen muchos bares y restaurantes alrededor tienen niveles de ruido mayores. Cuanto más oscuro sea el rojo del círculo que rodea al sensor, más ruidoso es. De la misma forma, cuanto más claro, menos ruidoso.
+
+Notar que es una visualización interactiva y que hay unos círculos con números. Este número corresponde a la cantidad de locales que hay en la zona. Si hacemos click, hará zoom en esa zona y creará nuevos grupos. Si hacemos click sucesivamente, podremos ver a qué locales corresponden. Si pinchamos en el local, podremos ver información relativa a ellos.
+
+Si miramos un poco el mapa, no tardará en aflorar la pregunta: ¿por qué el sensor `cadiz3` es (según nuestro criterio) el más ruidoso, pero no tiene apenas bares o restaurantes alrededor? La respuesta es sencilla. Solo hace falta ver que está situado frente a Gran Via de les Germanies, una vía urbana muy transitada.
+
+Es decir, el ruido que hace la gente en bares y restaurantes es una de las causas de estos altos niveles de ruido, pero también lo es el tráfico de vehículos. Sobre todo en las zonas más próximas a vías urbanas muy transitadas, como es el caso anterior.
+
+El mapa también cuenta con cuatro botones en la esquina superior izquierda. Los dos primeros son para hacer más y menos zoom; el tercero es para regresar a la vista inicial y el último es para buscar y situar la vista en el sensor que queramos.
+
+Si se hace click en un sensor, también se muestra información relativa a sus datos.
+
+Es recomendable probar a interactuar con el mapa.
