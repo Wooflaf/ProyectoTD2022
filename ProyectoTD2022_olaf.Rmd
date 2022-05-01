@@ -145,5 +145,6 @@ leaflet() %>%
             colors = c("darkred", "red", "salmon"),
             opacity = .7,
             title = "Sonómetros") %>%
-  addResetMapButton() # Botón para poder volver a la vista inicial
+  addResetMapButton() %>% # Botón para poder volver a la vista inicial
+  addSearchFeatures(targetGroups = "sonometros") # Botón de búsqueda de sonómetro
 ```
