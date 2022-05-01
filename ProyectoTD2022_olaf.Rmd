@@ -97,6 +97,9 @@ icon_sonometro <- awesomeIconList(
 ```
 
 ```{r leaflet}
+# ELIMINAR
+library(leaflet.extras)
+
 leaflet() %>%
   addProviderTiles("Esri") %>%
   addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
@@ -128,5 +131,6 @@ leaflet() %>%
             labels = c("Nivel 3", "Nivel 2", "Nivel 1"), 
             colors = c("darkred", "red", "salmon"),
             opacity = .7,
-            title = "Sonómetros")
+            title = "Sonómetros") %>%
+  addResetMapButton() # Botón para poder volver a la vista inicial
 ```
