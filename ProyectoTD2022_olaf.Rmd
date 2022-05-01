@@ -123,5 +123,10 @@ leaflet() %>%
                       all_df_ubi_median$street,
                       "<br>",
                       "<b> Mediana LAeq: </b>",
-                      all_df_ubi_median$median_LAeq))
+                      all_df_ubi_median$median_LAeq)) %>% 
+  addLegend(position = "bottomright", # Añadimos una leyenda orientativa
+            labels = c("Nivel 3", "Nivel 2", "Nivel 1"), 
+            colors = c("darkred", "red", "salmon"),
+            opacity = .7,
+            title = "Sonómetros")
 ```
