@@ -73,8 +73,7 @@ Utilizaremos este dataframe para la visualización geográfica. Notar que se mue
 icon_hosteleria <- makeAwesomeIcon(
   icon = "cutlery",
   iconColor = "black",
-  markerColor = "orange",
-  library = "fa"
+  markerColor = "orange"
 )
 
 icon_sonometro <- awesomeIconList(
