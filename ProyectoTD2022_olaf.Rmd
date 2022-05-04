@@ -141,23 +141,27 @@ Si miramos un poco el mapa, no tardará en aflorar la pregunta: ¿por qué el se
 
 Es decir, el ruido que hace la gente en bares y restaurantes es una de las causas de estos altos niveles de ruido, pero también lo es el tráfico de vehículos. Sobre todo en las zonas más próximas a vías urbanas muy transitadas, como es el caso anterior.
 
-
-```{r date_data}
-# Dataframe que utilizaremos para hacer una visualización de las diferentes medidas respecto de los meses, años, días de la semana y la semana dentro del mes. 
-date_data <- all_df %>% 
-  mutate(year = year(dateObserved),
-         month = month(dateObserved, label = T, abbr = F),
-         weekdayf = factor(wday(dateObserved, label = T, 
-                                week_start = 1, abbr = F), ordered = T),
-         monthweek = ceiling(day(dateObserved) / 7)) %>% 
-  pivot_longer(starts_with("LAeq"), names_to = "medida", values_to = "valor") %>%      
-  mutate(text = paste0("Valor: ", valor, " dB\n", "Fecha: ", 
-                       day(dateObserved)," de ", 
-                       month(dateObserved, label = T, abbr = F), " \n",
-                       "Día: ", str_to_title(weekdayf), " \n"))
-```
-
 ```{r tablas_informativas}
 # Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
 source("tablas_informativas.R")
+```
+# Visualización interactiva
+Hemos creado una visualización que son varios mapas de calor, divididos por año y mes. 
+
+[La escala se encuentra a la derecha. Cuanto más morado, más bajo es el nivel de ruido; cuanto más amarillo, más alto.]
+
+En el eje x tenemos los días de la semana y el eje y representa la semana dentro del mes correspondiente (varía entre 1-5). Es una visualización muy interesante, ya que de un solo vistazo, podemos observar cuándo se dan valores más altos o más bajos de ruido.
+
+Pensamos que dejarlo en un gráfico estático sería desaprovechar todo su potencial. Por eso mismo, hemos creado una aplicación con el paquete shiny que permite modificar a gusto del usuario distintos parámetros. 
+
+Las posibilidades de extraer información son mayores, ya que uno puede ir cambiando parámetros y observar, por ejemplo, que en los indicadores de ruido por la tarde, son más habituales valores más altos los viernes y sábados. O, por ejemplo, los efectos de las restricciones al ocio nocturno por la Covid-19.
+
+El objetivo de esto es que no haya unas preguntas fijas que nosotros contestamos. Más bien todo lo contrario. Es el propio usuario quien debe plantear las preguntas e, interactuando con los distintos gráficos, pueda sacar sus conclusiones.
+
+La aplicación está disponible a través del siguiente enlace:
+
+```{r shiny-data}
+# Guardamos las variables que serán utilizadas en la aplicación Shiny en un .RData que posteriormente cargaremos.
+save(list = c("ids", "all_df", "hosteleria", "all_df_ubi_median"),
+     file = "./RuidoRuzafaShiny/data/data.RData")
 ```
