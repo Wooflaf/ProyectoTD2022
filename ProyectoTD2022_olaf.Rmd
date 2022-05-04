@@ -152,7 +152,7 @@ Hemos creado una visualización que son varios mapas de calor, divididos por añ
 
 En el eje x tenemos los días de la semana y el eje y representa la semana dentro del mes correspondiente (varía entre 1-5). Es una visualización muy interesante, ya que de un solo vistazo, podemos observar cuándo se dan valores más altos o más bajos de ruido.
 
-Pensamos que dejarlo en un gráfico estático sería desaprovechar todo su potencial. Por eso mismo, hemos creado una aplicación con el paquete shiny que permite modificar a gusto del usuario distintos parámetros. 
+Pensamos que dejarlo en un gráfico estático sería desaprovechar todo su potencial. Por eso mismo, hemos creado una aplicación con el paquete `shiny` que permite modificar a gusto del usuario distintos parámetros. 
 
 Las posibilidades de extraer información son mayores, ya que uno puede ir cambiando parámetros y observar, por ejemplo, que en los indicadores de ruido por la tarde, son más habituales valores más altos los viernes y sábados. O, por ejemplo, los efectos de las restricciones al ocio nocturno por la Covid-19.
 
