@@ -2,13 +2,13 @@ boton_config <- dropdown(
   tags$h3("Configuración"),
   
   # Selector del rango de fechas
-  dateRangeInput("date_rg",
-                 label = "Selecciona el rango de fechas",
-                 start = "2020-09-17", end = today() - 1,
-                 min = "2020-09-17", max = today() - 1,
-                 separator = " - ", format = "dd/mm/yy",
+  dateRangeInputMod("date_rg",
+                 label = "Selecciona el rango de meses",
+                 start = "2020-09-01", end = today() - day(today() - 1),
+                 min = "2020-09-01", max = today() - day(today() - 1),
+                 separator = " - ", format = "mm/yyyy",
                  startview = "year", language = "es",
-                 weekstart = 1
+                 weekstart = 1, minview = "months", maxview = "decade"
   ),
   
   # Selector del sensor

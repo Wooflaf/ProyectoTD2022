@@ -18,6 +18,15 @@ library(naniar)
 
 load("./data/data.Rdata")
 
+dateRangeInputMod <- function(inputId, label, minview = "days", maxview = "y", ...) {
+  d <- shiny::dateRangeInput(inputId, label, ...)
+  d$children[[2L]]$children[[1]]$attribs[["data-date-min-view-mode"]] <- minview
+  d$children[[2L]]$children[[3]]$attribs[["data-date-min-view-mode"]] <- minview
+  d$children[[2L]]$children[[1]]$attribs[["data-date-max-view-mode"]] <- maxview
+  d$children[[2L]]$children[[3]]$attribs[["data-date-max-view-mode"]] <- maxview
+  d
+}
+
 date_heatmap <- function(df){
   ggplot(df, aes(monthweek, weekdayf, text = text)) + 
     geom_tile(aes(fill = valor)) + 
@@ -31,6 +40,10 @@ interactive_date_heatmap <- function(p){
   ggplotly(p, tooltip = "text") %>% 
     config(displayModeBar = FALSE)
 }
+
+color_pal <- colorNumeric(palette = colorRamp(c("#FDD49E", "#7F0000"), 
+                                              interpolate="spline"),
+                          all_df_ubi_median$scaled)
 
 source("visualizacion_geografica.R", local = TRUE, encoding = "UTF-8")
 source("boton_config.R", local = TRUE, encoding = "UTF-8")
