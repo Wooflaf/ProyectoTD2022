@@ -1,24 +1,48 @@
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
-  rval_medida <- reactive({
-    date_data %>%
-      filter(medida == input$med)
+  # Dataframe adaptado para la visualización del mapa de calor
+  rval_date <- reactive({
+    all_df %>%
+      group_by(entityId, street) %>%
+      complete(dateObserved = c(seq.Date(from = as.Date(input$date_rg[1]),
+                                         to = ultimo_dia_mes(input$date_rg[2]),
+                                         by = "day"))) %>%
+      mutate(year = year(dateObserved),
+             month = month(dateObserved, label = T, abbr = F),
+             weekdayf = factor(wday(dateObserved, label = T,
+                                    week_start = 1, abbr = F), ordered = T),
+             monthweek = ceiling(day(dateObserved) / 7)) %>%
+      pivot_longer(starts_with("LAeq"), 
+                   names_to = "medida", 
+                   values_to = "valor") %>%
+      mutate(text = ifelse(is.na(valor),
+                           paste0("Fecha: ", day(dateObserved)," de ",
+                                  month(dateObserved, label = T, abbr = F), " \n",
+                                  "No hay registro de este día"),
+                           paste0("Valor: ", valor, " dB\n", "Fecha: ",
+                                  day(dateObserved)," de ",
+                                  month(dateObserved, label = T, abbr = F), " \n",
+                                  "Día: ", str_to_title(weekdayf), " \n"))) %>%
+      filter(between(dateObserved, 
+                     as.Date(input$date_rg[1]),
+                     ultimo_dia_mes(input$date_rg[2])))
   })
   
-  rval_generic <- reactive({
-    rval_medida() %>%
-      filter(between(dateObserved, input$date_rg[1], input$date_rg[2]))
+  # Filtrado de medida seleccionada
+  rval_medida <- reactive({
+    rval_date() %>%
+      filter(medida == input$med)
   })
   
   # Generar dataframe para utilizar en el primer mapa de calor
   rval_df <- reactive({
-    rval_generic() %>% 
+    rval_medida() %>% 
       filter(street == input$calle)
   })
   
   # Generar dataframe para utilizar en el segundo mapa de calor
   rval_df2 <- reactive({
-    rval_generic() %>% 
+    rval_medida() %>% 
       filter(street == input$calle2)
   })
   

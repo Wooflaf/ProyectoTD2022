@@ -27,6 +27,11 @@ dateRangeInputMod <- function(inputId, label, minview = "days", maxview = "y", .
   d
 }
 
+ultimo_dia_mes <- function(date){
+  as.Date(date) %m+% months(1) %m-% days(1)
+}
+
+
 date_heatmap <- function(df){
   ggplot(df, aes(monthweek, weekdayf, text = text)) + 
     geom_tile(aes(fill = valor)) + 
