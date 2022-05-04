@@ -201,6 +201,7 @@ Es decir, el ruido que hace la gente en bares y restaurantes es una de las causa
 
 
 ```{r date_data}
+# Dataframe que utilizaremos para hacer una visualización de las diferentes medidas respecto de los meses, años, días de la semana y la semana dentro del mes. 
 date_data <- all_df %>% 
   mutate(year = year(dateObserved),
          month = month(dateObserved, label = T, abbr = F),
