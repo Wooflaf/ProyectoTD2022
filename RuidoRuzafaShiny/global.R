@@ -35,3 +35,4 @@ interactive_date_heatmap <- function(p){
 source("visualizacion_geografica.R", local = TRUE, encoding = "UTF-8")
 source("boton_config.R", local = TRUE, encoding = "UTF-8")
 source("tabs.R", local = TRUE, encoding = "UTF-8")
+source("../tablas_informativas.R", local = TRUE, encoding = "UTF-8")
