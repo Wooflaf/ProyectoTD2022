@@ -68,9 +68,9 @@ all_df_ubi_median[1:8] %>%
 Utilizaremos este dataframe para la visualización geográfica. Notar que se muestran ya los diferentes niveles establecidos. La diferenciación entre ellos son los valores de la mediana de la variable `LAeq`. El nivel 3 es para valores mayores de 60.8, el nivel 2 si los valores están entre 59 y 60.8 y finalmente, el nivel 1, es para valores menores de 59.
 
 ## Visualización geográfica
-```{r iconos_infobox}
+```{r icons_infobox}
 # Cargamos de un script los iconos que utilizaremos en la visualización geográfica, así como el texto que tendrá un botón informativo sobre la visualización
-source("leaflet_iconos_infobox.R")
+source("leaflet_icons_infobox.R")
 ```
 
 ```{r leaflet}
