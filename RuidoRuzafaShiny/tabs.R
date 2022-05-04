@@ -24,7 +24,10 @@ info_aplicacion_tab <- tabPanel("Sobre la aplicación",
                 HTML('<p>Datos de los sensores extraídos del <a href="https://www.valencia.es/dadesobertes/es/data/?groups=medio-ambiente">Portal de Datos Abiertos del Ayuntamiento de Valencia</a>.<br>Datos de bares y restaurantes extraídos de Google Maps mediante web scraping.</p>'),
                 
                 tags$h3("Limitación de los datos"),
-                HTML("<p>Los datos que hemos podido obtener de bares y restaurantes son los que hemos podido extraer de Google Maps. Es muy posible que algunos locales no estén presentes en el mapa. A pesar de ello, hay un total de 226; una cantidad más que suficiente para conseguir una buena representación.</p>")
+                HTML("<p>Los datos que hemos podido obtener de bares y restaurantes son los que hemos podido extraer de Google Maps. Es muy posible que algunos locales no estén presentes en el mapa. A pesar de ello, hay un total de 226; una cantidad más que suficiente para conseguir una buena representación.</p>"),
+                
+                tags$h3("Datos de contacto"),
+                HTML("<p>Si has detectado algún error, dato incorrecto, o información adicional que pueda mejorar la aplicación, puedes mandarme un email a <a href = 'mailto: omeal@alumni.uv.es'>omeal@alumni.uv.es</a> para poder corregirlo.</p>")
 )
 
 # Sub-panel con definiciones sobre los datos
