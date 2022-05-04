@@ -10,8 +10,69 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## ANÁLISIS UNIVARIANTE
-```{r}
 
++ Estas fechas marcan el inicio y el final del registro de datos
+```{r}
+all_df%>%arrange(dateObserved)%>% summarise(inicio = dateObserved[1],final=dateObserved[dim(all_df)[1]])
+```
++ Máximos niveles de ruido por cada variable
+```{r}
+all_df %>% summarise(maximo_LAeq = max(all_df[,2]),maximo_LAeq_d=max(all_df[,3]),
+                     maximo_LAeq_den=max(all_df[,4]),maximo_LAeq_e=max(all_df[,5]),
+                     maximo_LAeq_n=max(all_df[,6]))
+
+```
++ Media para cada variable numérica
+```{r}
+all_df %>% na.omit %>%summarise(media_LAeq=mean(all_df$LAeq),
+                                media_LAeq_d=mean(all_df$LAeq_d),
+                                media_LAeq_den=mean(all_df$LAeq_den),
+                                media_LAeq_e=mean(all_df$LAeq_e),
+                                media_LAeq_n=mean(all_df$LAeq_n))
+```
++
+```{r}
+mascleta <- all_df %>% filter(dateObserved == c("2021-03-01","2021-03-02",
+                                                "2021-03-03","2021-03-04","2021-03-05","2021-03-06",
+                                                "2021-03-07","2021-03-08","2021-03-09","2021-03-10",
+                                                "2021-03-11","2021-03-12","2021-03-13"))
+
+fallas <- all_df %>% filter(dateObserved == c("2021-03-14","2021-03-15","2021-03-16","2021-03-17","2021-03-18","2021-03-19"))
+
+resto <- all_df %>% filter(dateObserved != c("2021-03-01","2021-03-02","2021-03-03","2021-03-04","2021-03-05","2021-03-06","2021-03-07","2021-03-08","2021-03-09","2021-03-10","2021-03-11","2021-03-12","2021-03-13","2021-03-14","2021-03-15","2021-03-16","2021-03-17","2021-03-18","2021-03-19"))
+
+mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
+                    media_mascleta_LAeq_d=mean(mascleta$LAeq_d),
+                    media_mascleta_LAeq_den=mean(mascleta$LAeq_den),
+                    media_mascleta_LAeq_e=mean(mascleta$LAeq_e),
+                    media_mascleta_LAeq_n=mean(mascleta$LAeq_n),
+                    maximo_mascleta_LAeq = max(mascleta$LAeq),
+                    maximo_mascleta_LAeq_d=max(mascleta$LAeq_d),
+                    maximo_mascleta_LAeq_den=max(mascleta$LAeq_den),
+                    maximo_mascleta_LAeq_e=max(mascleta$LAeq_e),
+                    maximo_mascleta_LAeq_n=max(mascleta$LAeq_n))
+
+fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
+                    media_fallas_LAeq_d=mean(fallas$LAeq_d),
+                    media_fallas_LAeq_den=mean(fallas$LAeq_den),
+                    media_fallas_LAeq_e=mean(fallas$LAeq_e),
+                    media_fallas_LAeq_n=mean(fallas$LAeq_n),
+                    maximo_fallas_LAeq = max(fallas$LAeq),
+                    maximo_fallas_LAeq_d=max(fallas$LAeq_d),
+                    maximo_fallas_LAeq_den=max(fallas$LAeq_den),
+                    maximo_fallas_LAeq_e=max(fallas$LAeq_e),
+                    maximo_fallas_LAeq_n=max(fallas$LAeq_n))
+
+resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
+                    media_resto_LAeq_d=mean(resto$LAeq_d),
+                    media_resto_LAeq_den=mean(resto$LAeq_den),
+                    media_resto_LAeq_e=mean(resto$LAeq_e),
+                    media_resto_LAeq_n=mean(resto$LAeq_n),
+                    maximo_resto_LAeq = max(resto$LAeq),
+                    maximo_resto_LAeq_d=max(resto$LAeq_d),
+                    maximo_resto_LAeq_den=max(resto$LAeq_den),
+                    maximo_resto_LAeq_e=max(resto$LAeq_e),
+                    maximo_resto_LAeq_n=max(resto$LAeq_n))
 ```
 
 ## ANÁLISIS BIVARIANTE
