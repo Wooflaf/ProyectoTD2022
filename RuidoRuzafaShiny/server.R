@@ -50,7 +50,7 @@ shinyServer(function(input, output, session) {
   output$heatmap <- plotly::renderPlotly({
     p <- rval_df() %>% 
       date_heatmap() +
-      labs(title = paste("Mapa de calor para la calle", input$calle),
+      labs(title = paste("Mapa de calor para ", nombres_calle[nombres_calle[1] == input$calle, 2]),
            fill=paste(input$med, "(dB)"))
     
     interactive_date_heatmap(p)
@@ -60,7 +60,7 @@ shinyServer(function(input, output, session) {
   output$heatmap2 <- plotly::renderPlotly({
     p2 <- rval_df2() %>%
       date_heatmap() +
-      labs(title = paste("Mapa de calor para la calle", input$calle2),
+      labs(title = paste("Mapa de calor para la calle", nombres_calle[nombres_calle[1] == input$calle2, 2]),
            fill=paste(input$med, "(dB)"))
     
     interactive_date_heatmap(p2)
