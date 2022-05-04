@@ -87,7 +87,7 @@ color_pal <- colorNumeric(palette = colorRamp(c("#FDD49E", "#7F0000"),
                           all_df_ubi_median$scaled)
 
 leaflet() %>%
-  addProviderTiles("Esri") %>%
+  addProviderTiles(providers$OpenStreetMap.HOT) %>%
   addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
                     clusterOptions = markerClusterOptions(), # Agrupación de marcadores
                     icon = icon_hosteleria,
@@ -148,7 +148,7 @@ source("tablas_informativas.R")
 # Visualización interactiva
 Hemos creado una visualización que son varios mapas de calor, divididos por año y mes. 
 
-[La escala se encuentra a la derecha. Cuanto más morado, más bajo es el nivel de ruido; cuanto más amarillo, más alto.]
+![La escala se encuentra a la derecha. Cuanto más morado, más bajo es el nivel de ruido; cuanto más amarillo, más alto.](figure/heatmap.png)
 
 En el eje x tenemos los días de la semana y el eje y representa la semana dentro del mes correspondiente (varía entre 1-5). Es una visualización muy interesante, ya que de un solo vistazo, podemos observar cuándo se dan valores más altos o más bajos de ruido.
 

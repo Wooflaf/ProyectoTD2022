@@ -1,7 +1,6 @@
 visualizacion_geografica <- function(){
   leaflet() %>%
     addProviderTiles(providers$OpenStreetMap.HOT) %>%
-    # addProviderTiles(providers$CartoDB.Voyager) %>%
     addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
                       clusterOptions = markerClusterOptions(), # Agrupación de marcadores
                       icon = icon_hosteleria,
