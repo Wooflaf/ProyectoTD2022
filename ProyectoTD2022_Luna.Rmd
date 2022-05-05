@@ -1,5 +1,5 @@
 ---
-title: "ProyectoTD2022_Luna.Rmd"
+title: "ProyectoTD2022_luna.Rmd"
 author: "Luna Moreno"
 date: "4/5/2022"
 output: html_document
@@ -32,14 +32,11 @@ all_df %>% na.omit %>%summarise(media_LAeq=mean(all_df$LAeq),
 ```
 +
 ```{r}
-mascleta <- all_df %>% filter(dateObserved == c("2021-03-01","2021-03-02",
-                                                "2021-03-03","2021-03-04","2021-03-05","2021-03-06",
-                                                "2021-03-07","2021-03-08","2021-03-09","2021-03-10",
-                                                "2021-03-11","2021-03-12","2021-03-13"))
+mascleta <- all_df %>% filter(between(dateObserved, ymd("2022-03-01"),ymd("2022-03-13"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
-fallas <- all_df %>% filter(dateObserved == c("2021-03-14","2021-03-15","2021-03-16","2021-03-17","2021-03-18","2021-03-19"))
+fallas <- all_df %>% filter(between(dateObserved, ymd("2022-03-14"),ymd("2022-03-19"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
-resto <- all_df %>% filter(dateObserved != c("2021-03-01","2021-03-02","2021-03-03","2021-03-04","2021-03-05","2021-03-06","2021-03-07","2021-03-08","2021-03-09","2021-03-10","2021-03-11","2021-03-12","2021-03-13","2021-03-14","2021-03-15","2021-03-16","2021-03-17","2021-03-18","2021-03-19"))
+resto <- all_df %>% filter(!between(dateObserved,ymd("2022-03-01"),ymd("2022-03-19"))&!between(dateObserved,ymd("2021-09-01"),ymd("2021-09-05")))
 
 mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
                     media_mascleta_LAeq_d=mean(mascleta$LAeq_d),
