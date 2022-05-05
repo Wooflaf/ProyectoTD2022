@@ -12,6 +12,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ANALISIS UNIVARIANTE
 
 ```{r}
+#Creamos la tabla de estadisticos con los estadisticos requeridos
+estadisticos <- all_df %>%
+  group_by(street) %>%
+  select(2:6) %>% #Seleccionamos las calles con valores
+  summarize(across(everything(),(list(
+        vminimo = ~ min(., na.rm = TRUE),
+        mediana =~ mean(., na.rm = TRUE),
+        percentil25 = ~ quantile(., 0.25, na.rm =TRUE),
+        vmedio =~ median(., na.rm = TRUE),                
+        desviacion_tipica =~ sd(., na.rm = TRUE),
+        percentil75 =~ mean(., 0.75,  na.rm = TRUE),
+        vmaximo  =~ max(., na.rm = TRUE)))))
 
 ```
 
@@ -23,3 +35,4 @@ ANALISIS BIVARIANTE
 ```
 
 CONCLUSIONES
+
