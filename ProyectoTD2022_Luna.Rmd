@@ -22,6 +22,14 @@ all_df %>% summarise(maximo_LAeq = max(all_df[,2]),maximo_LAeq_d=max(all_df[,3])
                      maximo_LAeq_n=max(all_df[,6]))
 
 ```
++ Mínimos registrados en cada variable
+```{r}
+all_df %>% summarise(minimo_LAeq = min(all_df[,2]),minimo_LAeq_d=min(all_df[,3]),
+                     minimo_LAeq_den=min(all_df[,4]),minimo_LAeq_e=min(all_df[,5]),
+                     minimo_LAeq_n=min(all_df[,6]))
+```
+
+
 + Media para cada variable numérica
 ```{r}
 all_df %>% na.omit %>%summarise(media_LAeq=mean(all_df$LAeq),
