@@ -15,7 +15,7 @@ ANALISIS UNIVARIANTE
 #Creamos la tabla de estadisticos con los estadisticos requeridos
 estadisticos <- all_df %>%
   group_by(street) %>%
-  select(2:6) %>% #Seleccionamos las calles con valores
+  select(2:6,8) %>% #Seleccionamos las calles con valores
   summarize(across(everything(),(list(
         vminimo = ~ min(., na.rm = TRUE),
         mediana =~ mean(., na.rm = TRUE),
@@ -25,14 +25,27 @@ estadisticos <- all_df %>%
         percentil75 =~ mean(., 0.75,  na.rm = TRUE),
         vmaximo  =~ max(., na.rm = TRUE)))))
 
-```
+g <- ggplot(all_df, aes(dateObserved, fill = street )) +
+  geom_hline(yintercept= 65, color = "red") +
+  scale_x_date(breaks = "6 months") +
+  facet_wrap(~street)
 
+g + geom_violin(aes(y = LAeq))
+g + geom_violin(aes(y = LAeq_d))
+g + geom_violin(aes(y = LAeq_den))
+g + geom_violin(aes(y = LAeq_e))
+g + geom_violin(aes(y = LAeq_n))
+
+
+```
 
 ANALISIS BIVARIANTE
 
 ```{r}
+ggpairs(all_df, columns = 2:5)
 
+#Realizamos un análisis por calle de los datos 
+ggpairs(all_df,columns = 2:5, aes(color = street,alpha = 0.5), upper = list(continuous = wrap("cor", size = 1.85)))
 ```
 
 CONCLUSIONES
-
