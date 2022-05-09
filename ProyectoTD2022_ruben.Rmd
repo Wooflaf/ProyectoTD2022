@@ -1,14 +1,3 @@
----
-title: "ProyectoTD2022_ruben.Rmd"
-author: "Rubén Sales Castellar"
-date: "30/04/2022"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## El efecto de las Medidas del Covid
 
 ```{r}
