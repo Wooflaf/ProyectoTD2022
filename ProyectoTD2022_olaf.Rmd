@@ -1,0 +1,167 @@
+# ¿Influye la presencia de bares y restaurantes en los niveles de ruido registrados?
+Según un [estudio de concentración de locales en el barrio de Ruzafa](http://www.valencia.es/ayuntamiento/urbanismo2.nsf/0/A577FFDD7E036298C1257D180037E247/$FILE/MODIFICACI%C3%93%20DE%20LES%20NORMES%20URBAN%C3%8DSTIQUES%20DEL%20PLA%20ESPECIAL%20DE%20RUSSAFA-SUD%20GRAN%20VIA%20(PEP-2).pdf?OpenElement?d&embedded=true), realizado por el Ayuntamiento de Valencia en Mayo de 2014, el número total de bares y restaurantes era de 277; 11.37 bares por cada 1000 habitantes del barrio de Ruzafa, es decir, 1.96 veces la media de la ciudad en esas fechas.
+
+Por eso mismo creemos que influirá mucho en los niveles de ruido registrados. Lo comprobaremos haciendo uso de los datos, mediante una visualización geográfica de la ubicación de los sonómetros, bares y restaurantes. Pero, ¿cómo obtener sus respectivas ubicaciones? ¿Qué bares hay en Ruzafa? 
+
+## Datos de bares y restaurantes
+Lo que hemos realizado es obtener mediante web scraping la información de estos servicios de hostelería. Los datos han sido extraídos de Google Maps, datos que se pueden obtener haciendo las búsquedas de 'restaurantes ruzafa' y 'bares ruzafa'. No creemos haber conseguido la totalidad de servicios, pero sí los suficientes como para hacer una buena representación.
+```{r load hosteleria}
+# Carga de datos de bares y restaurantes
+bares <- read_delim("./data/bares_ruzafa.csv", delim = "\t", 
+                    escape_double = FALSE, trim_ws = TRUE) %>% 
+  rename_with(function(x){x <- "name"}, starts_with("Name"))
+
+restaurantes <- read_delim("./data/restaurantes_ruzafa.csv", delim = "\t", 
+                           escape_double = FALSE, trim_ws = TRUE) %>% 
+  rename_with(function(x){x <- "name"}, starts_with("Name"))
+```
+Haremos un limpiado básico de los datos para que se adecúen a aquello que buscamos.
+```{r clean hosteleria}
+# Filtraremos los posibles duplicados
+mismos_locales <- base::intersect(bares$name, restaurantes$name) 
+
+hosteleria <- bind_rows(bares, 
+                        restaurantes %>% filter(!(name %in% mismos_locales))) %>% 
+  select(name, Category, domingo:sábado, Address, Latitude, Longitude) %>% # Variables de posible interés
+  filter(between(Longitude, -0.38, -0.368) & between(Latitude, 39.458, 39.465)) %>% 
+  filter(!(Category %in% c("Mercado", "Iglesia Católica", "Salón de manicura y pedicura")))
+# Filtramos los servicios de hostelería en un rectángulo concreto.
+# Eliminamos categorías que no se corresponden con servicios de hostelería.
+```
+```{r} 
+glimpse(hosteleria) # Estructura del dataframe final 
+```
+Tenemos un total de 226 registros de servicios de hostelería y su correspondiente información.
+```{r}
+vis_miss(hosteleria)
+```
+Observamos que solo faltan datos en las variables que corresponden a los horarios. No utilizaremos por ahora esa información, por lo que no es importante que falten esos datos. Podemos proceder a visualizarlos.
+
+## Dataframe de ubicaciones
+```{r df_ubi}
+lat_ord <- latitude[order(names(ids))]
+lon_ord <- longitude[order(names(ids))]
+
+# Dataframe con las ubicaciones y las medianas (según el sensor) de las variables relacionadas con el sonido 
+all_df_ubi_median <- complete_data %>% 
+  mutate(latitude = rep(lat_ord, nrow(complete_data)/length(ids)),
+         longitude = rep(lon_ord, nrow(complete_data)/length(ids))) %>% 
+  filter(if_all(everything(), ~!is.na(.x))) %>%
+  group_by(street, latitude, longitude) %>% 
+  summarise(across(starts_with("LA"), ~median(.x), .names = "median_{.col}")) %>% 
+  mutate(nivel = case_when(median_LAeq >= 60.8 ~ "Nivel 3", # Etiquetas para clasificar los más y menos ruidosos
+                           median_LAeq < 60.8 & median_LAeq >= 59 ~ "Nivel 2",
+                           median_LAeq < 59 ~ "Nivel 1")) %>% 
+  arrange(desc(median_LAeq)) %>% 
+  ungroup()
+
+# ELIMINAR
+library(kableExtra)
+
+all_df_ubi_median[1:8] %>% 
+  kbl() %>%
+  kable_material(full_width = F) %>% 
+  pack_rows("Nivel 3", 1, 6, background = "darkred", color = "white") %>% 
+  pack_rows("Nivel 2", 7, 11, background = "red", color = "white") %>% 
+  pack_rows("Nivel 1", 12, 14, background = "salmon", color = "white")
+```
+Utilizaremos este dataframe para la visualización geográfica. Notar que se muestran ya los diferentes niveles establecidos. La diferenciación entre ellos son los valores de la mediana de la variable `LAeq`. El nivel 3 es para valores mayores de 60.8, el nivel 2 si los valores están entre 59 y 60.8 y finalmente, el nivel 1, es para valores menores de 59.
+
+## Visualización geográfica
+```{r icons_infobox}
+# Cargamos de un script los iconos que utilizaremos en la visualización geográfica, así como el texto que tendrá un botón informativo sobre la visualización
+source("leaflet_icons_infobox.R")
+```
+
+```{r leaflet}
+# ELIMINAR
+library(leaflet.extras)
+library(htmlwidgets)
+
+all_df_ubi_median <- all_df_ubi_median %>% # Variable scaled: median_LAeq entre 0 y 1
+  mutate(scaled = (median_LAeq - min(median_LAeq))/(max(median_LAeq)-min(median_LAeq)))
+
+# Ponemos la variable entre 0 y 1 para poder aplicarle una paleta de colores
+color_pal <- colorNumeric(palette = colorRamp(c("#FDD49E", "#7F0000"), 
+                                              interpolate="spline"),
+                          all_df_ubi_median$scaled)
+
+leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap.HOT) %>%
+  addAwesomeMarkers(data = hosteleria, lng = ~Longitude, lat = ~Latitude, # Marcadores de hostelería
+                    clusterOptions = markerClusterOptions(), # Agrupación de marcadores
+                    icon = icon_hosteleria,
+                    label = ~name,
+                    popup = paste0(
+                      "<b> Nombre: </b>",
+                      hosteleria$name,
+                      "<br>",
+                      "<b> Categoría: </b>",
+                      hosteleria$Category,
+                      "<br>",
+                      "<b> Dirección: </b>",
+                      hosteleria$Address)) %>% 
+  setView(lng = median(hosteleria$Longitude), # Vista inicial: mediana de lats y longs para que esté 'centrada'
+          lat = median(hosteleria$Latitude), zoom = 16) %>%
+  addAwesomeMarkers(data = all_df_ubi_median, lng = ~longitude, lat = ~latitude, # Marcadores sonómetros
+                    icon = ~icon_sonometro[nivel],
+                    label = ~street,
+                    group = "sonometros",
+                    popup = paste0(
+                      "<b> Nombre: </b>",
+                      all_df_ubi_median$street,
+                      "<br>",
+                      "<b> Mediana LAeq: </b>",
+                      all_df_ubi_median$median_LAeq, " dB")) %>% 
+  addCircleMarkers(data = all_df_ubi_median, lng = ~longitude, lat = ~latitude,
+                   radius = ~3*sqrt(median_LAeq),
+                   opacity = 0.8,
+                   color = ~color_pal(scaled),
+                   fillOpacity = 0.6) %>% 
+  addLegend(position = "bottomright", # Añadimos una leyenda orientativa
+            labels = c("Nivel 3", "Nivel 2", "Nivel 1"), 
+            colors = c("darkred", "red", "salmon"),
+            opacity = .7,
+            title = "Sonómetros") %>%
+  addResetMapButton() %>% # Botón para poder volver a la vista inicial
+  addSearchFeatures(targetGroups = "sonometros") %>% # Botón de búsqueda de sonómetro
+  addBootstrapDependency() %>%
+  addEasyButton(easyButton(
+    icon = "glyphicon-info-sign", title = "Información del mapa",
+    onClick = JS("function(btn, map){ $('#infobox').modal('show'); }")
+  )) %>%
+  htmlwidgets::appendContent(info.box)
+```
+# Conclusiones de la visualización geográfica
+Gracias a esta visualización podemos observar claramente que los sensores que tienen muchos bares y restaurantes alrededor tienen niveles de ruido mayores. Cuanto más oscuro sea el rojo del círculo que rodea al sensor, más ruidoso es. De la misma forma, cuanto más claro, menos ruidoso.
+
+Notar que es una visualización interactiva. En la esquina superior izquierda, si se hace click en el último botón, se muestra la información relativa a los botones y la interactividad, entre otras cosas. Es recomendable leer esa información y probar a interactuar con el mapa.
+
+Si miramos un poco el mapa, no tardará en aflorar la pregunta: ¿por qué el sensor `cadiz3` es (según nuestro criterio) el más ruidoso, pero no tiene apenas bares o restaurantes alrededor? La respuesta es sencilla. Solo hace falta ver que está situado frente a Gran Via de les Germanies, una vía urbana muy transitada.
+
+Es decir, el ruido que hace la gente en bares y restaurantes es una de las causas de estos altos niveles de ruido, pero también lo es el tráfico de vehículos. Sobre todo en las zonas más próximas a vías urbanas muy transitadas, como es el caso anterior.
+
+```{r tablas_informativas}
+# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
+source("tablas_informativas.R")
+```
+# Visualización interactiva
+Hemos creado una visualización que son varios mapas de calor, divididos por año y mes. 
+
+![La escala se encuentra a la derecha. Cuanto más morado, más bajo es el nivel de ruido; cuanto más amarillo, más alto.](figure/heatmap.png)
+
+En el eje x tenemos los días de la semana y el eje y representa la semana dentro del mes correspondiente (varía entre 1-5). Es una visualización muy interesante, ya que de un solo vistazo, podemos observar cuándo se dan valores más altos o más bajos de ruido.
+
+Pensamos que dejarlo en un gráfico estático sería desaprovechar todo su potencial. Por eso mismo, hemos creado una aplicación con el paquete `shiny` que permite modificar a gusto del usuario distintos parámetros. 
+
+Las posibilidades de extraer información son mayores, ya que uno puede ir cambiando parámetros y observar, por ejemplo, que en los indicadores de ruido por la tarde, son más habituales valores más altos los viernes y sábados. O, por ejemplo, los efectos de las restricciones al ocio nocturno por la Covid-19.
+
+El objetivo de esto es que no haya unas preguntas fijas que nosotros contestamos. Más bien todo lo contrario. Es el propio usuario quien debe plantear las preguntas e, interactuando con los distintos gráficos, pueda sacar sus conclusiones.
+
+La aplicación está disponible a través del siguiente enlace:
+
+```{r shiny-data}
+# Guardamos las variables que serán utilizadas en la aplicación Shiny en un .RData que posteriormente cargaremos.
+save(list = c("ids", "all_df", "hosteleria", "all_df_ubi_median"),
+     file = "./RuidoRuzafaShiny/data/data.RData")
+```

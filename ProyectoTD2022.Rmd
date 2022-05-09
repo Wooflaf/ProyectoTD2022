@@ -291,7 +291,7 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r olaf, child = c('ProyectoTD2022_olaf.Rmd'), eval = F}
+```{r olaf, child = c('ProyectoTD2022_olaf.Rmd'), eval = T}
 
 ```
 
