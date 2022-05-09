@@ -287,7 +287,7 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r luna, child = c('ProyectoTD2022_luna.Rmd'), eval = F}
+```{r luna, child = c('ProyectoTD2022_Luna.Rmd'), eval = T}
 
 ```
 
@@ -295,10 +295,10 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = F}
+```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = T}
 
 ```
 
-```{r wilson, child = c('ProyectoTD2022_wilson.Rmd'), eval = F}
+```{r wilson, child = c('ProyectoTD2022_Wilson.Rmd'), eval = T}
 
 ```
