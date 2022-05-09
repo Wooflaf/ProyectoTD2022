@@ -1,13 +1,4 @@
----
-title: "ProyectoTD2022_luna.Rmd"
-author: "Luna Moreno"
-date: "4/5/2022"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## ANÁLISIS UNIVARIANTE
 
