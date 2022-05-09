@@ -1,0 +1,87 @@
+---
+title: "ProyectoTD2022_ruben.Rmd"
+author: "Rubén Sales Castellar"
+date: "30/04/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## El efecto de las Medidas del Covid
+
+```{r}
+dates_vline<-ymd(c("2020-10-25", "2021-05-09"))
+# ESTADO DE ALARMA NACIONAL 2, FIN ESTADO DE ALARMA NACIONAL 2
+
+for(calle in names(ids)){
+  print(ggplot(complete_data %>% 
+          filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
+          facet_wrap(~street) +
+          labs(x = "Fecha", title = "Datos nocturnos sensor") +
+          theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90)) +
+          geom_line() +
+          geom_vline(xintercept = dates_vline, col = "red", lwd = 1) +
+          geom_text(aes(dates_vline[1], 71.5, label = "Estado de Alarma",
+                        vjust = 1, angle = 90)) +
+          geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1,
+                        angle = 90)) +
+          scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")) +
+          ylim(40,90))}
+```
+
+```{r}
+e_alarma<-complete_data %>%
+  group_by(street) %>%
+  filter(dates_vline[1]<dateObserved & dateObserved<dates_vline[2]) %>%
+  summarise(Media_E_Alarma = mean(LAeq_n, na.rm = T))
+
+no_e_alarma<-complete_data %>%
+  group_by(street) %>%
+  filter(dateObserved<dates_vline[1] | dates_vline[2]<dateObserved) %>%
+  summarise(Media_Resto = mean(LAeq_n, na.rm = T))
+
+full_join(e_alarma, no_e_alarma)
+```
+
+Fuente de las fechas: <https://es.wikipedia.org/wiki/Confinamiento_por_la_pandemia_de_COVID-19_en_Espa%C3%B1a#Segundo_estado_de_alarma_nacional>.
+
+## El efecto de las Fallas
+
+```{r}
+dates_vline<-ymd(c("2021-09-01", "2021-09-05"))
+# FALLAS 2021, FIN FALLAS 2021
+
+for(calle in names(ids)){
+  print(ggplot(complete_data %>% 
+          filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
+          facet_wrap(~street) +
+          labs(x = "Fecha", title = "Datos diurnos sensor") +
+          theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90)) +
+          geom_line() +
+          geom_vline(xintercept = dates_vline, col = "red", lwd = 1) +
+          geom_text(aes(dates_vline[1], 71.5, label = "Inicio Fallas",
+                        vjust = -1, angle = 90)) +
+          geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1.5,
+                        angle = 90)) +
+          scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")) +
+          xlim(ymd(c("2021-08-21", "2021-09-18"))) +
+          ylim(40,90))}
+```
+
+```{r}
+fallas<-complete_data %>%
+  group_by(street) %>%
+  filter(dates_vline[1]<dateObserved & dateObserved<dates_vline[2]) %>%
+  summarise(Media_Fallas = mean(LAeq_n, na.rm = T))
+
+no_fallas<-complete_data %>%
+  group_by(street) %>%
+  filter(dateObserved<dates_vline[1] | dates_vline[2]<dateObserved) %>%
+  summarise(Media_Resto = mean(LAeq_n, na.rm = T))
+
+full_join(fallas, no_fallas)
+```
+
+Fuente de las fechas: <https://www.antena3.com/noticias/sociedad/programa-fallas-2021-fechas-horarios-fallas-valencia_20210901612f3d63426181000132ad0c.html>.
