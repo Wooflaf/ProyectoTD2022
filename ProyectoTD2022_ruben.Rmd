@@ -27,7 +27,8 @@ for(calle in names(ids)){
                         vjust = 1, angle = 90)) +
           geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1,
                         angle = 90)) +
-          scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")))}
+          scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")) +
+          ylim(40,90))}
 ```
 
 ```{r}
@@ -65,7 +66,8 @@ for(calle in names(ids)){
           geom_text(aes(dates_vline[2], 71.5, label = "Fin", vjust = 1.5,
                         angle = 90)) +
           scale_color_manual(values = c("x_3" = "blue", "x_5" = "red")) +
-          xlim(ymd(c("2021-08-21", "2021-09-18"))))}
+          xlim(ymd(c("2021-08-21", "2021-09-18"))) +
+          ylim(40,90))}
 ```
 
 ```{r}
