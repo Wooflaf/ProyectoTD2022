@@ -64,7 +64,7 @@ knit_hooks$set(inline = function(x) {
 
 packages = c("knitr","tidyverse", "lubridate", "magrittr", "leaflet", "shiny",
              "shinythemes", "GGally", "forcats", "ggridges", "viridis", "naniar",
-             "skimr")
+             "skimr", "leaflet.extras", "htmlwidgets", "kableExtra")
 
 # Función que comprueba si tenemos instalado un paquete
 # Si está instalado, lo carga

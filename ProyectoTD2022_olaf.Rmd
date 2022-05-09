@@ -55,9 +55,6 @@ all_df_ubi_median <- complete_data %>%
   arrange(desc(median_LAeq)) %>% 
   ungroup()
 
-# ELIMINAR
-library(kableExtra)
-
 all_df_ubi_median[1:8] %>% 
   kbl() %>%
   kable_material(full_width = F) %>% 
@@ -74,10 +71,6 @@ source("leaflet_icons_infobox.R")
 ```
 
 ```{r leaflet}
-# ELIMINAR
-library(leaflet.extras)
-library(htmlwidgets)
-
 all_df_ubi_median <- all_df_ubi_median %>% # Variable scaled: median_LAeq entre 0 y 1
   mutate(scaled = (median_LAeq - min(median_LAeq))/(max(median_LAeq)-min(median_LAeq)))
 
