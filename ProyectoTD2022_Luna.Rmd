@@ -1,0 +1,223 @@
+---
+title: "ProyectoTD2022_luna.Rmd"
+author: "Luna Moreno"
+date: "4/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ANÁLISIS UNIVARIANTE
+
++ Estas fechas marcan el inicio y el final del registro de datos
+```{r}
+all_df%>%arrange(dateObserved)%>% summarise(inicio = dateObserved[1],final=dateObserved[dim(all_df)[1]])
+```
++ Máximos niveles de ruido por cada variable
+```{r}
+all_df %>% summarise(maximo_LAeq = max(all_df[,2]),maximo_LAeq_d=max(all_df[,3]),
+                     maximo_LAeq_den=max(all_df[,4]),maximo_LAeq_e=max(all_df[,5]),
+                     maximo_LAeq_n=max(all_df[,6]))
+
+```
++ Mínimos registrados en cada variable
+```{r}
+all_df %>% summarise(minimo_LAeq = min(all_df[,2]),minimo_LAeq_d=min(all_df[,3]),
+                     minimo_LAeq_den=min(all_df[,4]),minimo_LAeq_e=min(all_df[,5]),
+                     minimo_LAeq_n=min(all_df[,6]))
+```
+
+
++ Media para cada variable numérica
+```{r}
+all_df %>% na.omit %>%summarise(media_LAeq=mean(all_df$LAeq),
+                                media_LAeq_d=mean(all_df$LAeq_d),
+                                media_LAeq_den=mean(all_df$LAeq_den),
+                                media_LAeq_e=mean(all_df$LAeq_e),
+                                media_LAeq_n=mean(all_df$LAeq_n))
+```
++ Medias y máximo para los días con mascletà, días de fallas, con el estado de alarma activo, el resto de días que no pertenecen a lo anteriormente nombrado y cuando ya se terminó el estado de alarma.
+```{r}
+mascleta <- all_df %>% filter(between(dateObserved, ymd("2022-03-01"),ymd("2022-03-13"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
+
+mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
+                    media_mascleta_LAeq_d=mean(mascleta$LAeq_d),
+                    media_mascleta_LAeq_den=mean(mascleta$LAeq_den),
+                    media_mascleta_LAeq_e=mean(mascleta$LAeq_e),
+                    media_mascleta_LAeq_n=mean(mascleta$LAeq_n),
+                    maximo_mascleta_LAeq = max(mascleta$LAeq),
+                    maximo_mascleta_LAeq_d=max(mascleta$LAeq_d),
+                    maximo_mascleta_LAeq_den=max(mascleta$LAeq_den),
+                    maximo_mascleta_LAeq_e=max(mascleta$LAeq_e),
+                    maximo_mascleta_LAeq_n=max(mascleta$LAeq_n))
+
+fallas <- all_df %>% filter(between(dateObserved, ymd("2022-03-14"),ymd("2022-03-19"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
+
+fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
+                    media_fallas_LAeq_d=mean(fallas$LAeq_d),
+                    media_fallas_LAeq_den=mean(fallas$LAeq_den),
+                    media_fallas_LAeq_e=mean(fallas$LAeq_e),
+                    media_fallas_LAeq_n=mean(fallas$LAeq_n),
+                    maximo_fallas_LAeq = max(fallas$LAeq),
+                    maximo_fallas_LAeq_d=max(fallas$LAeq_d),
+                    maximo_fallas_LAeq_den=max(fallas$LAeq_den),
+                    maximo_fallas_LAeq_e=max(fallas$LAeq_e),
+                    maximo_fallas_LAeq_n=max(fallas$LAeq_n))
+
+alarma<- all_df %>% filter(between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
+
+alarma %>% summarise(media_alarma_LAeq=mean(alarma$LAeq),
+                    media_alarma_LAeq_d=mean(alarma$LAeq_d),
+                    media_alarma_LAeq_den=mean(alarma$LAeq_den),
+                    media_alarma_LAeq_e=mean(alarma$LAeq_e),
+                    media_alarma_LAeq_n=mean(alarma$LAeq_n),
+                    maximo_alarma_LAeq = max(alarma$LAeq),
+                    maximo_alarma_LAeq_d=max(alarma$LAeq_d),
+                    maximo_alarma_LAeq_den=max(alarma$LAeq_den),
+                    maximo_alarma_LAeq_e=max(alarma$LAeq_e),
+                    maximo_alarma_LAeq_n=max(alarma$LAeq_n))
+
+resto <- all_df %>% filter(!between(dateObserved,ymd("2022-03-01"),ymd("2022-03-19"))&!between(dateObserved,ymd("2021-09-01"),ymd("2021-09-05"))&!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
+
+resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
+                    media_resto_LAeq_d=mean(resto$LAeq_d),
+                    media_resto_LAeq_den=mean(resto$LAeq_den),
+                    media_resto_LAeq_e=mean(resto$LAeq_e),
+                    media_resto_LAeq_n=mean(resto$LAeq_n),
+                    maximo_resto_LAeq = max(resto$LAeq),
+                    maximo_resto_LAeq_d=max(resto$LAeq_d),
+                    maximo_resto_LAeq_den=max(resto$LAeq_den),
+                    maximo_resto_LAeq_e=max(resto$LAeq_e),
+                    maximo_resto_LAeq_n=max(resto$LAeq_n))
+
+no_alarma <- all_df %>% filter(!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
+
+no_alarma %>% summarise(media_no_alarma_LAeq=mean(no_alarma$LAeq),
+                    media_no_alarma_LAeq_d=mean(no_alarma$LAeq_d),
+                    media_no_alarma_LAeq_den=mean(no_alarma$LAeq_den),
+                    media_no_alarma_LAeq_e=mean(no_alarma$LAeq_e),
+                    media_no_alarma_LAeq_n=mean(no_alarma$LAeq_n),
+                    maximo_no_alarma_LAeq = max(no_alarma$LAeq),
+                    maximo_no_alarma_LAeq_d=max(no_alarma$LAeq_d),
+                    maximo_no_alarma_LAeq_den=max(no_alarma$LAeq_den),
+                    maximo_no_alarma_LAeq_e=max(no_alarma$LAeq_e),
+                    maximo_no_alarma_LAeq_n=max(no_alarma$LAeq_n))
+```
+
+
+
+## ANÁLISIS BIVARIANTE
+
++ Contamos los outliers que hay por diferentes métodos y los mostramos
+```{r}
+madm <- function(x, na.rm=T) { 
+  1.4826*quantile(abs(x-quantile(x,0.5,na.rm)),0.5,na.rm)
+}
+
+
+# Regla 3 sigma
+reglasigma <- function(x) {
+  m <- mean(x,na.rm=TRUE)
+  s <- sd(x,na.rm=TRUE)
+  res <- (x > m+3*s) | (x < m-3*s)
+  return(res)
+}
+
+# Identificador Hampel
+reglahampel <- function(x) { 
+  m <- median(x,na.rm=T)
+  d <- madm(x,na.rm=T)
+  res <- ((x > m+3*d) | (x < m-3*d))
+  return(res)
+}
+
+# Regla boxplot
+reglaboxplot <- function(x) {
+a <- quantile(x,0.25,na.rm=TRUE)
+b <- quantile(x,0.75,na.rm=TRUE)
+i <- b-a
+res <- (x > b + 1.5*i) | (x < a - 1.5*i)
+return(res)
+}
+
+#Percentiles
+reglapercentil <- function(x) {
+a <- quantile(x,0.05,na.rm=TRUE)
+b <- quantile(x,0.95,na.rm=TRUE)
+res <- (x < a) | (b < x)
+return(res)
+}
+
+metodos <- list(reglasigma=reglasigma,reglahampel=reglahampel,reglaboxplot=reglaboxplot,reglapercentil=reglapercentil)
+
+all_df2 <- all_df %>% mutate(across(LAeq,metodos))
+
+Outliers <- all_df2 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+Outliers
+
+sort(all_df2$LAeq[all_df2$LAeq_reglasigma],decreasing=T)
+sort(all_df2$LAeq[all_df2$LAeq_reglasigma],decreasing=T)
+sort(all_df2$LAeq[all_df2$LAeq_reglasigma],decreasing=T)
+sort(all_df2$LAeq[all_df2$LAeq_reglasigma],decreasing=T)
+
+all_df3 <- all_df %>% mutate(across(LAeq_d,metodos))
+
+Outliers2 <- all_df3 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+Outliers2
+
+sort(all_df3$LAeq_d[all_df3$LAeq_d_reglasigma],decreasing=T)
+sort(all_df3$LAeq_d[all_df3$LAeq_d_reglasigma],decreasing=T)
+sort(all_df3$LAeq_d[all_df3$LAeq_d_reglasigma],decreasing=T)
+sort(all_df3$LAeq_d[all_df3$LAeq_d_reglasigma],decreasing=T)
+
+all_df4 <- all_df %>% mutate(across(LAeq_den,metodos))
+
+Outliers3 <- all_df4 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+Outliers3
+
+sort(all_df4$LAeq_den[all_df4$LAeq_den_reglasigma],decreasing=T)
+sort(all_df4$LAeq_den[all_df4$LAeq_den_reglasigma],decreasing=T)
+sort(all_df4$LAeq_den[all_df4$LAeq_den_reglasigma],decreasing=T)
+sort(all_df4$LAeq_den[all_df4$LAeq_den_reglasigma],decreasing=T)
+
+all_df5 <- all_df %>% mutate(across(LAeq_e,metodos))
+
+Outliers4 <- all_df5 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+Outliers4
+
+sort(all_df5$LAeq_e[all_df5$LAeq_e_reglasigma],decreasing=T)
+sort(all_df5$LAeq_e[all_df5$LAeq_e_reglasigma],decreasing=T)
+sort(all_df5$LAeq_e[all_df5$LAeq_e_reglasigma],decreasing=T)
+sort(all_df5$LAeq_e[all_df5$LAeq_e_reglasigma],decreasing=T)
+
+all_df6 <- all_df %>% mutate(across(LAeq_n,metodos))
+
+Outliers5 <- all_df6 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+Outliers5
+
+sort(all_df6$LAeq_n[all_df6$LAeq_n_reglasigma],decreasing=T)
+sort(all_df6$LAeq_n[all_df6$LAeq_n_reglasigma],decreasing=T)
+sort(all_df6$LAeq_n[all_df6$LAeq_n_reglasigma],decreasing=T)
+sort(all_df6$LAeq_n[all_df6$LAeq_n_reglasigma],decreasing=T)
+```
++
+```{r}
+
+v1 <- c(146,307,401,656)
+v2 <- c(119,240,344,658)
+v3 <- c(146,241,276,648)
+v4 <- c(139,216,232,662)
+v5 <- c(127,177,200,667)
+barplot(v1, xlab= "método",main=" Cantidad de outliers detectados por cada método",col="white")
+barplot(v2,col= alpha("aquamarine2",0.9), add=T)
+barplot(v3,col=alpha("mediumorchid1",0.8), add=T)
+barplot(v4,col=alpha("mediumpurple4",0.7), add=T)
+barplot(v5,col=alpha("paleturquoise",0.6), add=T)
+
+
+
+```
+
+## OBSERVACIONES
