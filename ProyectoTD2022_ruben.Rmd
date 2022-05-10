@@ -1,10 +1,18 @@
-## El efecto de las Medidas del Covid
+# ¿Ha variado el ruido a lo largo del tiempo?
+
+## El efecto de las medidas del Covid-19
+
+Des de el comienzo de la pandemia se han adoptado una serie de medidas de excepción que, especialmente durante los Estados de Alarma y el confinamiento, redujeron drásticamente la movilidad. Entre las fechas registradas en el conjunto de datos se encuentran las del segundo Estado de Alarma, con lo que surje la pregunta, ¿hasta qué punto ha supuesto un impacto en los niveles de ruido?
+
+Por las características del segundo Estado de Alarma, vamos a plantear la pregunta des de los datos nocturnos. Con el objetivo de obtener respuestas realizaremos unos gráficos representativos dónde podamos ver visualmente la diferencia.
 
 ```{r}
 dates_vline<-ymd(c("2020-10-25", "2021-05-09"))
 # ESTADO DE ALARMA NACIONAL 2, FIN ESTADO DE ALARMA NACIONAL 2
 
-for(calle in names(ids)){
+relevantes <- c("carlescervera_reina", "vivons", "salvador")
+
+for(calle in relevantes){
   print(ggplot(complete_data %>% 
           filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
           facet_wrap(~street) +
@@ -20,6 +28,8 @@ for(calle in names(ids)){
           ylim(40,90))}
 ```
 
+A continuación creamos una tabla resumen que sirva para hacernos una idea de todos los sensores.
+
 ```{r}
 e_alarma<-complete_data %>%
   group_by(street) %>%
@@ -31,18 +41,26 @@ no_e_alarma<-complete_data %>%
   filter(dateObserved<dates_vline[1] | dates_vline[2]<dateObserved) %>%
   summarise(Media_Resto = mean(LAeq_n, na.rm = T))
 
-full_join(e_alarma, no_e_alarma)
+full_join(no_e_alarma, e_alarma) %>%
+  mutate(Diferencia = Media_Resto - Media_E_Alarma) %>%
+  kable()
 ```
 
 Fuente de las fechas: <https://es.wikipedia.org/wiki/Confinamiento_por_la_pandemia_de_COVID-19_en_Espa%C3%B1a#Segundo_estado_de_alarma_nacional>.
 
 ## El efecto de las Fallas
 
+Aunque las Fallas de 2021 estuvieron marcadas por la pandemia, sobretodo por un reducido programa de fiestas y su aplazamiento a septiembre, nos preguntamos si tendrá alguna relación con el nivel de ruido. En este caso, tomaremos los datos diurnos para que quede registrado el efecto de la *mascletà*.
+
+Comenzamos mirando unos gráficos de los sensores más representativos durante un período de aproximadamente.
+
 ```{r}
 dates_vline<-ymd(c("2021-09-01", "2021-09-05"))
 # FALLAS 2021, FIN FALLAS 2021
 
-for(calle in names(ids)){
+relevantes<-c("carlescervera34", "cadiz16", "cuba3")
+
+for(calle in relevantes){
   print(ggplot(complete_data %>% 
           filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
           facet_wrap(~street) +
