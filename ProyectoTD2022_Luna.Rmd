@@ -1,5 +1,3 @@
-
-
 ## ANÁLISIS UNIVARIANTE
 
 + Estas fechas marcan el inicio y el final del registro de datos
@@ -45,7 +43,10 @@ mascleta1 <- mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
                     maximo_mascleta_LAeq_e=max(mascleta$LAeq_e),
                     maximo_mascleta_LAeq_n=max(mascleta$LAeq_n))
 kable(mascleta1)
+```
 
+
+```{r}
 fallas <- all_df %>% filter(between(dateObserved, ymd("2022-03-14"),ymd("2022-03-19"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
 fallas1 <-fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
@@ -59,7 +60,10 @@ fallas1 <-fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
                     maximo_fallas_LAeq_e=max(fallas$LAeq_e),
                     maximo_fallas_LAeq_n=max(fallas$LAeq_n))
 kable(fallas1)
+```
 
+
+```{r}
 alarma<- all_df %>% filter(between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
 
 alarma1 <- alarma %>% summarise(media_alarma_LAeq=mean(alarma$LAeq),
@@ -73,7 +77,10 @@ alarma1 <- alarma %>% summarise(media_alarma_LAeq=mean(alarma$LAeq),
                     maximo_alarma_LAeq_e=max(alarma$LAeq_e),
                     maximo_alarma_LAeq_n=max(alarma$LAeq_n))
 kable(alarma1)
+```
 
+
+```{r}
 navidad <- all_df %>% filter(between(dateObserved, ymd("2020-12-23"),ymd("2021-01-06"))|between(dateObserved, ymd("2021-12-23"),ymd("2022-01-06")))
 
 navidad1 <- navidad %>% summarise(media_navidad_LAeq=mean(navidad$LAeq),
@@ -87,7 +94,10 @@ navidad1 <- navidad %>% summarise(media_navidad_LAeq=mean(navidad$LAeq),
                     maximo_navidad_LAeq_e=max(navidad$LAeq_e),
                     maximo_navidad_LAeq_n=max(navidad$LAeq_n))
 kable(navidad1)
+```
 
+
+```{r}
 pascua <- all_df %>% filter(between(dateObserved, ymd("2021-04-01"),ymd("2021-04-12"))|between(dateObserved, ymd("2022-04-14"),ymd("2022-04-24")))
 
 pascua1 <- pascua %>% summarise(media_pascua_LAeq=mean(pascua$LAeq),
@@ -101,7 +111,10 @@ pascua1 <- pascua %>% summarise(media_pascua_LAeq=mean(pascua$LAeq),
                     maximo_pscua_LAeq_e=max(pascua$LAeq_e),
                     maximo_pascua_LAeq_n=max(pascua$LAeq_n))
 kable(pascua1)
+```
 
+
+```{r}
 verano <- all_df %>% filter(between(dateObserved, ymd("2021-06-01"),ymd("2021-09-01")))
 
 verano1 <- verano %>% summarise(verano_pascua_LAeq=mean(verano$LAeq),
@@ -115,7 +128,10 @@ verano1 <- verano %>% summarise(verano_pascua_LAeq=mean(verano$LAeq),
                     maximo_verano_LAeq_e=max(verano$LAeq_e),
                     maximo_verano_LAeq_n=max(verano$LAeq_n))
 kable(verano1)
+```
 
+
+```{r}
 resto <- all_df %>% filter(!between(dateObserved,ymd("2022-03-01"),ymd("2022-03-19"))&!between(dateObserved,ymd("2021-09-01"),ymd("2021-09-05"))&!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08"))&!(between(dateObserved, ymd("2020-12-23"),ymd("2021-01-06"))&!between(dateObserved, ymd("2021-12-23"),ymd("2022-01-06"))&!(between(dateObserved, ymd("2021-04-01"),ymd("2021-04-12"))&!between(dateObserved, ymd("2022-04-14"),ymd("2022-04-24"))&!between(dateObserved, ymd("2021-06-01"),ymd("2021-09-01")))))
 
 resto1 <- resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
@@ -129,7 +145,10 @@ resto1 <- resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
                     maximo_resto_LAeq_e=max(resto$LAeq_e),
                     maximo_resto_LAeq_n=max(resto$LAeq_n))
 kable(resto1)
+```
 
+
+```{r}
 no_alarma <- all_df %>% filter(!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
 
 no_alarma1 <- no_alarma %>% summarise(media_no_alarma_LAeq=mean(no_alarma$LAeq),
@@ -144,10 +163,6 @@ no_alarma1 <- no_alarma %>% summarise(media_no_alarma_LAeq=mean(no_alarma$LAeq),
                     maximo_no_alarma_LAeq_n=max(no_alarma$LAeq_n))
 kable(no_alarma1)
 ```
-
-
-
-## ANÁLISIS BIVARIANTE
 
 + Contamos los outliers que hay por diferentes métodos y los mostramos
 ```{r}
@@ -183,7 +198,10 @@ b <- quantile(x,0.95,na.rm=TRUE)
 res <- (x < a) | (b < x)
 return(res)
 }
+```
 
+
+```{r}
 metodos <- list(reglasigma=reglasigma,reglahampel=reglahampel,reglaboxplot=reglaboxplot,reglapercentil=reglapercentil)
 
 all_df2 <- all_df %>% mutate(across(LAeq,metodos))
@@ -193,26 +211,28 @@ kable(Outliers)
 
 all_df3 <- all_df %>% mutate(across(LAeq_d,metodos))
 
-Outliers2 <- all_df3 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
-kable(Outliers2)
+Outliers1 <- all_df3 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+kable(Outliers1)
 
 all_df4 <- all_df %>% mutate(across(LAeq_den,metodos))
 
-Outliers3 <- all_df4 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
-kable(Outliers3)
+Outliers2 <- all_df4 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+kable(Outliers2)
 
 all_df5 <- all_df %>% mutate(across(LAeq_e,metodos))
 
-Outliers4 <- all_df5 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
-kable(Outliers4)
+Outliers3 <- all_df5 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+kable(Outliers3)
 
 all_df6 <- all_df %>% mutate(across(LAeq_n,metodos))
 
-Outliers5 <- all_df6 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
-kable(Outliers5)
-
+Outliers4 <- all_df6 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T)
+kable(Outliers4)
 ```
 
+## ANÁLISIS BIVARIANTE
+
++
 ```{r}
 m <- mascleta%>%select(ends_with("LAeq"),dateObserved)%>%rename(mascleta = "LAeq")%>% pivot_longer(cols="mascleta",names_to= "temporada",values_to = "valores")
 f <- fallas%>%select(ends_with("LAeq"),dateObserved)%>%rename(fallas = "LAeq")%>%pivot_longer(cols="fallas",names_to= "temporada",values_to = "valores")
@@ -230,27 +250,30 @@ z <- rbind(z,n)
 z <- rbind(z,n.a)
 z <- rbind(z,p)
 z <- rbind(z,r)
+```
 
+
+```{r}
 ggplot(z, aes(x = dateObserved, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))+labs(title = "Gráfico de decibelios por día",x= "Fecha",y="dB")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x=element_text(angle=90))
-
 ```
 
 +
 ```{r}
+o <- all_df2 %>% select(contains("regla"))%>% pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
+o1 <- all_df3 %>% select(contains("regla")) %>% pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
+o2 <- all_df4 %>% select(contains("regla")) %>% pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
+o3 <- all_df5 %>% select(contains("regla"))%>%pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
+o4 <-all_df6 %>% select(contains("regla")) %>% pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
+o <- rbind(o,o1)
+o <- rbind(o,o2)
+o <- rbind(o,o3)
+o <- rbind(o,o4)
+o <- o%>% filter(outliers_encontrados=="TRUE")
+```
 
-v1 <- c(146,307,401,656)
-v2 <- c(119,240,344,658)
-v3 <- c(146,241,276,648)
-v4 <- c(139,216,232,662)
-v5 <- c(127,177,200,667)
 
-
-barplot(v1, xlab= "método",main=" Cantidad de outliers detectados por cada método",col="white")
-barplot(v2,col= alpha("aquamarine2",0.9), add=T)
-barplot(v3,col=alpha("mediumorchid1",0.8), add=T)
-barplot(v4,col=alpha("mediumpurple4",0.7), add=T)
-barplot(v5,col=alpha("paleturquoise",0.6), add=T)
-
+```{r}
+ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.text.x=element_text(angle=90))
 ```
 
 ## OBSERVACIONES
