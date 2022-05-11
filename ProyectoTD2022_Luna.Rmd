@@ -245,8 +245,8 @@ z <- rbind(z,r)
 k <- c(1:dim(z)[1])
 z <- cbind(z,k)
 
-ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","brown2","coral1","mediumorchid","cyan3"))
-ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_violin()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","brown2","coral1","mediumorchid","cyan3"))
+ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))
+ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_violin()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))
 ```
 
 +
