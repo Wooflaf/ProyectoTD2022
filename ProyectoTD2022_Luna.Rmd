@@ -214,14 +214,14 @@ kable(Outliers5)
 ```
 
 ```{r}
-m <- mascleta%>%select(ends_with("LAeq"))%>%rename(mascleta = "LAeq")%>%pivot_longer(cols="mascleta",names_to= "temporada",values_to = "valores")
-f <- fallas%>%select(ends_with("LAeq"))%>%rename(fallas = "LAeq")%>%pivot_longer(cols="fallas",names_to= "temporada",values_to = "valores")
-v <- verano%>%select(ends_with("LAeq"))%>%rename(verano = "LAeq")%>%pivot_longer(cols="verano",names_to= "temporada",values_to = "valores")
-a <- alarma%>%select(ends_with("LAeq"))%>%rename(alarma = "LAeq")%>%pivot_longer(cols="alarma",names_to= "temporada",values_to = "valores")
-n <- navidad%>%select(ends_with("LAeq"))%>%rename(navidad = "LAeq") %>%pivot_longer(cols="navidad",names_to= "temporada",values_to = "valores")
-n.a <- no_alarma%>%select(ends_with("LAeq"))%>%rename(no_alarma = "LAeq")%>%pivot_longer(cols="no_alarma",names_to= "temporada",values_to = "valores")
-p <- pascua%>%select(ends_with("LAeq"))%>%rename(pascua = "LAeq")%>%pivot_longer(cols="pascua",names_to= "temporada",values_to = "valores")
-r <- resto%>%select(ends_with("LAeq"))%>%rename(resto = "LAeq")%>%pivot_longer(cols="resto",names_to= "temporada",values_to = "valores")
+m <- mascleta%>%select(ends_with("LAeq"),dateObserved)%>%rename(mascleta = "LAeq")%>% pivot_longer(cols="mascleta",names_to= "temporada",values_to = "valores")
+f <- fallas%>%select(ends_with("LAeq"),dateObserved)%>%rename(fallas = "LAeq")%>%pivot_longer(cols="fallas",names_to= "temporada",values_to = "valores")
+v <- verano%>%select(ends_with("LAeq"),dateObserved)%>%rename(verano = "LAeq")%>%pivot_longer(cols="verano",names_to= "temporada",values_to = "valores")
+a <- alarma%>%select(ends_with("LAeq"),dateObserved)%>%rename(alarma = "LAeq")%>%pivot_longer(cols="alarma",names_to= "temporada",values_to = "valores")
+n <- navidad%>%select(ends_with("LAeq"),dateObserved)%>%rename(navidad = "LAeq") %>%pivot_longer(cols="navidad",names_to= "temporada",values_to = "valores")
+n.a <- no_alarma%>%select(ends_with("LAeq"),dateObserved)%>%rename(no_alarma = "LAeq")%>%pivot_longer(cols="no_alarma",names_to= "temporada",values_to = "valores")
+p <- pascua%>%select(ends_with("LAeq"),dateObserved)%>%rename(pascua = "LAeq")%>%pivot_longer(cols="pascua",names_to= "temporada",values_to = "valores")
+r <- resto%>%select(ends_with("LAeq"),dateObserved)%>%rename(resto = "LAeq")%>%pivot_longer(cols="resto",names_to= "temporada",values_to = "valores")
 
 z <- rbind(m,f)
 z <- rbind(z,v)
@@ -230,23 +230,9 @@ z <- rbind(z,n)
 z <- rbind(z,n.a)
 z <- rbind(z,p)
 z <- rbind(z,r)
-# 
-# k <- c(1:dim(m)[1])
-# k <- c(k,1:dim(f)[1])
-# k <- c(k,1:dim(v)[1])
-# k <- c(k,1:dim(a)[1])
-# k <- c(k,1:dim(n)[1])
-# k <- c(k,1:dim(n.a)[1])
-# k <- c(k,1:dim(p)[1])
-# k <- c(k,1:dim(r)[1])
-# 
-# s <- cbind(z,k)
 
-k <- c(1:dim(z)[1])
-z <- cbind(z,k)
+ggplot(z, aes(x = dateObserved, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))+labs(title = "Gráfico de decibelios por día",x= "Fecha",y="dB")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x=element_text(angle=90))
 
-ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))
-ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_violin()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))
 ```
 
 +
@@ -257,6 +243,8 @@ v2 <- c(119,240,344,658)
 v3 <- c(146,241,276,648)
 v4 <- c(139,216,232,662)
 v5 <- c(127,177,200,667)
+
+
 barplot(v1, xlab= "método",main=" Cantidad de outliers detectados por cada método",col="white")
 barplot(v2,col= alpha("aquamarine2",0.9), add=T)
 barplot(v3,col=alpha("mediumorchid1",0.8), add=T)
