@@ -273,7 +273,7 @@ o <- o%>% filter(outliers_encontrados=="TRUE")
 
 
 ```{r}
-ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.text.x=element_text(angle=90))+ labs(title = "Outliers encontrados aplicando cada regla",caption = "LAeq= nivel sonoro continuo equivalente
+ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.text.x=element_text(angle=90))+ labs(title = "Outliers encontrados aplicando cada regla",x="",y="dB ",caption = "LAeq= nivel sonoro continuo equivalente
 
                                                                                                                    LAeq_d = desde las 07h hasta las 19h
                                                                                                                    
@@ -281,7 +281,8 @@ ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.te
                                                                                                                    
                                                                                                                    LAeq_e = desde las 19h hasta las 23h
                                                                                                                    
-                                                                                                                   LAeq_n= desde las 23h hasta las 07h")
+                                                                                                                   LAeq_n= desde las 23h hasta las 07h") 
+
 ```
 
 ## OBSERVACIONES
