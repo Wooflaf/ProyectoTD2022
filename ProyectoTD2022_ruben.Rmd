@@ -1,10 +1,49 @@
-## El efecto de las Medidas del Covid
+# ¿Ha variado el ruido a lo largo del tiempo?
+
+Es fácil pensar que los datos variarán a lo largo del tiempo, pero, ¿se aprecian realmente diferencias significativas entre diferentes períodos de tiempo? En este apartado vamos a dividir los datos en diferentes intervalos temporales de interés para estudiar su efecto.
+
+## Ruido por mes
+
+Comenzemos por ver qué ruido presentan los diferentes meses con una gráfica.
+
+```{r}
+medias<-complete_data %>%
+  mutate(Mes = as.character(month(dateObserved))) %>%
+  mutate(Mes = factor(Mes, ordered = T, levels = c("1","2","3","4","5","6","7","8","9","10","11","12"), labels = c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"))) %>%
+  group_by(Mes) %>%
+  summarise(Media_Mes_Dia = mean(LAeq, na.rm = T),
+            Media_Mes_Noche = mean(LAeq_d, na.rm = T))
+
+medias %>%
+  ggplot(mapping = aes(x = Mes, y = Media_Mes_Dia)) +
+  geom_line(aes(group=1, fill = "black"), size=1) +
+  geom_point(aes(color = "red")) +
+  ggtitle("Ruido medio por mes") +
+  ylab("Ruido de día") +
+  theme(axis.text.x=element_text(angle=90), legend.position = "none")
+  
+```
+
+Ahora visualizaremos los datos en forma de tabla.
+
+```{r}
+medias %>%
+  kable()
+```
+
+## El efecto de las medidas del Covid-19
+
+Des de el comienzo de la pandemia se han adoptado una serie de medidas de excepción que, especialmente durante los Estados de Alarma y el confinamiento, redujeron drásticamente la movilidad. Entre las fechas registradas en el conjunto de datos se encuentran las del segundo Estado de Alarma, con lo que surje la pregunta, ¿hasta qué punto ha supuesto un impacto en los niveles de ruido?
+
+Por las características del segundo Estado de Alarma, vamos a plantear la pregunta des de los datos nocturnos. Con el objetivo de obtener respuestas realizaremos unos gráficos representativos dónde podamos ver visualmente la diferencia.
 
 ```{r}
 dates_vline<-ymd(c("2020-10-25", "2021-05-09"))
 # ESTADO DE ALARMA NACIONAL 2, FIN ESTADO DE ALARMA NACIONAL 2
 
-for(calle in names(ids)){
+relevantes <- c("carlescervera_reina", "vivons", "salvador")
+
+for(calle in relevantes){
   print(ggplot(complete_data %>% 
           filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
           facet_wrap(~street) +
@@ -20,6 +59,8 @@ for(calle in names(ids)){
           ylim(40,90))}
 ```
 
+A continuación creamos una tabla resumen que sirva para hacernos una idea de todos los sensores.
+
 ```{r}
 e_alarma<-complete_data %>%
   group_by(street) %>%
@@ -31,18 +72,26 @@ no_e_alarma<-complete_data %>%
   filter(dateObserved<dates_vline[1] | dates_vline[2]<dateObserved) %>%
   summarise(Media_Resto = mean(LAeq_n, na.rm = T))
 
-full_join(e_alarma, no_e_alarma)
+full_join(no_e_alarma, e_alarma) %>%
+  mutate(Diferencia = Media_Resto - Media_E_Alarma) %>%
+  kable()
 ```
 
 Fuente de las fechas: <https://es.wikipedia.org/wiki/Confinamiento_por_la_pandemia_de_COVID-19_en_Espa%C3%B1a#Segundo_estado_de_alarma_nacional>.
 
 ## El efecto de las Fallas
 
+Aunque las Fallas de 2021 estuvieron marcadas por la pandemia, sobretodo por un reducido programa de fiestas y su aplazamiento a septiembre, nos preguntamos si tendrá alguna relación con el nivel de ruido. En este caso, tomaremos los datos diurnos para que quede registrado el efecto de la *mascletà*.
+
+Comenzamos mirando unos gráficos de los sensores más representativos durante un período de aproximadamente.
+
 ```{r}
 dates_vline<-ymd(c("2021-09-01", "2021-09-05"))
 # FALLAS 2021, FIN FALLAS 2021
 
-for(calle in names(ids)){
+relevantes<-c("carlescervera34", "cadiz16", "cuba3")
+
+for(calle in relevantes){
   print(ggplot(complete_data %>% 
           filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
           facet_wrap(~street) +
@@ -59,6 +108,8 @@ for(calle in names(ids)){
           ylim(40,90))}
 ```
 
+Como se había hecho anteriormente, vamos a organizar la información relevante en una tabla con todas los sensores.
+
 ```{r}
 fallas<-complete_data %>%
   group_by(street) %>%
@@ -70,7 +121,9 @@ no_fallas<-complete_data %>%
   filter(dateObserved<dates_vline[1] | dates_vline[2]<dateObserved) %>%
   summarise(Media_Resto = mean(LAeq_n, na.rm = T))
 
-full_join(fallas, no_fallas)
+full_join(fallas, no_fallas) %>%
+  mutate(Diferencia = Media_Fallas - Media_Resto) %>%
+  kable()
 ```
 
 Fuente de las fechas: <https://www.antena3.com/noticias/sociedad/programa-fallas-2021-fechas-horarios-fallas-valencia_20210901612f3d63426181000132ad0c.html>.
