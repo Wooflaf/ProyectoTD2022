@@ -34,7 +34,7 @@ kable(all_df %>% na.omit %>%summarise(media_LAeq=mean(all_df$LAeq),
 ```{r}
 mascleta <- all_df %>% filter(between(dateObserved, ymd("2022-03-01"),ymd("2022-03-13"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
-kable(mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
+mascleta1 <- mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
                     media_mascleta_LAeq_d=mean(mascleta$LAeq_d),
                     media_mascleta_LAeq_den=mean(mascleta$LAeq_den),
                     media_mascleta_LAeq_e=mean(mascleta$LAeq_e),
@@ -43,11 +43,12 @@ kable(mascleta%>% summarise(media_mascleta_LAeq=mean(mascleta$LAeq),
                     maximo_mascleta_LAeq_d=max(mascleta$LAeq_d),
                     maximo_mascleta_LAeq_den=max(mascleta$LAeq_den),
                     maximo_mascleta_LAeq_e=max(mascleta$LAeq_e),
-                    maximo_mascleta_LAeq_n=max(mascleta$LAeq_n)))
+                    maximo_mascleta_LAeq_n=max(mascleta$LAeq_n))
+kable(mascleta1)
 
 fallas <- all_df %>% filter(between(dateObserved, ymd("2022-03-14"),ymd("2022-03-19"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
-kable(fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
+fallas1 <-fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
                     media_fallas_LAeq_d=mean(fallas$LAeq_d),
                     media_fallas_LAeq_den=mean(fallas$LAeq_den),
                     media_fallas_LAeq_e=mean(fallas$LAeq_e),
@@ -56,11 +57,12 @@ kable(fallas%>% summarise(media_fallas_LAeq=mean(fallas$LAeq),
                     maximo_fallas_LAeq_d=max(fallas$LAeq_d),
                     maximo_fallas_LAeq_den=max(fallas$LAeq_den),
                     maximo_fallas_LAeq_e=max(fallas$LAeq_e),
-                    maximo_fallas_LAeq_n=max(fallas$LAeq_n)))
+                    maximo_fallas_LAeq_n=max(fallas$LAeq_n))
+kable(fallas1)
 
 alarma<- all_df %>% filter(between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
 
-kable(alarma %>% summarise(media_alarma_LAeq=mean(alarma$LAeq),
+alarma1 <- alarma %>% summarise(media_alarma_LAeq=mean(alarma$LAeq),
                     media_alarma_LAeq_d=mean(alarma$LAeq_d),
                     media_alarma_LAeq_den=mean(alarma$LAeq_den),
                     media_alarma_LAeq_e=mean(alarma$LAeq_e),
@@ -69,11 +71,54 @@ kable(alarma %>% summarise(media_alarma_LAeq=mean(alarma$LAeq),
                     maximo_alarma_LAeq_d=max(alarma$LAeq_d),
                     maximo_alarma_LAeq_den=max(alarma$LAeq_den),
                     maximo_alarma_LAeq_e=max(alarma$LAeq_e),
-                    maximo_alarma_LAeq_n=max(alarma$LAeq_n)))
+                    maximo_alarma_LAeq_n=max(alarma$LAeq_n))
+kable(alarma1)
 
-resto <- all_df %>% filter(!between(dateObserved,ymd("2022-03-01"),ymd("2022-03-19"))&!between(dateObserved,ymd("2021-09-01"),ymd("2021-09-05"))&!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
+navidad <- all_df %>% filter(between(dateObserved, ymd("2020-12-23"),ymd("2021-01-06"))|between(dateObserved, ymd("2021-12-23"),ymd("2022-01-06")))
 
-kable(resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
+navidad1 <- navidad %>% summarise(media_navidad_LAeq=mean(navidad$LAeq),
+                    media_navidad_LAeq_d=mean(navidad$LAeq_d),
+                    media_navidad_LAeq_den=mean(navidad$LAeq_den),
+                    media_navidad_LAeq_e=mean(navidad$LAeq_e),
+                    media_navidad_LAeq_n=mean(navidad$LAeq_n),
+                    maximo_navidad_LAeq = max(navidad$LAeq),
+                    maximo_navidad_LAeq_d=max(navidad$LAeq_d),
+                    maximo_navidad_LAeq_den=max(navidad$LAeq_den),
+                    maximo_navidad_LAeq_e=max(navidad$LAeq_e),
+                    maximo_navidad_LAeq_n=max(navidad$LAeq_n))
+kable(navidad1)
+
+pascua <- all_df %>% filter(between(dateObserved, ymd("2021-04-01"),ymd("2021-04-12"))|between(dateObserved, ymd("2022-04-14"),ymd("2022-04-24")))
+
+pascua1 <- pascua %>% summarise(media_pascua_LAeq=mean(pascua$LAeq),
+                    media_pascua_LAeq_d=mean(pascua$LAeq_d),
+                    media_pascua_LAeq_den=mean(pascua$LAeq_den),
+                    media_pascua_LAeq_e=mean(pascua$LAeq_e),
+                    media_pascua_LAeq_n=mean(pascua$LAeq_n),
+                    maximo_pascua_LAeq = max(pascua$LAeq),
+                    maximo_pascua_LAeq_d=max(pascua$LAeq_d),
+                    maximo_pascua_LAeq_den=max(pascua$LAeq_den),
+                    maximo_pscua_LAeq_e=max(pascua$LAeq_e),
+                    maximo_pascua_LAeq_n=max(pascua$LAeq_n))
+kable(pascua1)
+
+verano <- all_df %>% filter(between(dateObserved, ymd("2021-06-01"),ymd("2021-09-01")))
+
+verano1 <- verano %>% summarise(verano_pascua_LAeq=mean(verano$LAeq),
+                    media_vernao_LAeq_d=mean(verano$LAeq_d),
+                    media_verano_LAeq_den=mean(verano$LAeq_den),
+                    media_verano_LAeq_e=mean(verano$LAeq_e),
+                    media_verano_LAeq_n=mean(verano$LAeq_n),
+                    maximo_verano_LAeq = max(verano$LAeq),
+                    maximo_verano_LAeq_d=max(verano$LAeq_d),
+                    maximo_verano_LAeq_den=max(verano$LAeq_den),
+                    maximo_verano_LAeq_e=max(verano$LAeq_e),
+                    maximo_verano_LAeq_n=max(verano$LAeq_n))
+kable(verano1)
+
+resto <- all_df %>% filter(!between(dateObserved,ymd("2022-03-01"),ymd("2022-03-19"))&!between(dateObserved,ymd("2021-09-01"),ymd("2021-09-05"))&!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08"))&!(between(dateObserved, ymd("2020-12-23"),ymd("2021-01-06"))&!between(dateObserved, ymd("2021-12-23"),ymd("2022-01-06"))&!(between(dateObserved, ymd("2021-04-01"),ymd("2021-04-12"))&!between(dateObserved, ymd("2022-04-14"),ymd("2022-04-24"))&!between(dateObserved, ymd("2021-06-01"),ymd("2021-09-01")))))
+
+resto1 <- resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
                     media_resto_LAeq_d=mean(resto$LAeq_d),
                     media_resto_LAeq_den=mean(resto$LAeq_den),
                     media_resto_LAeq_e=mean(resto$LAeq_e),
@@ -82,11 +127,12 @@ kable(resto %>% summarise(media_resto_LAeq=mean(resto$LAeq),
                     maximo_resto_LAeq_d=max(resto$LAeq_d),
                     maximo_resto_LAeq_den=max(resto$LAeq_den),
                     maximo_resto_LAeq_e=max(resto$LAeq_e),
-                    maximo_resto_LAeq_n=max(resto$LAeq_n)))
+                    maximo_resto_LAeq_n=max(resto$LAeq_n))
+kable(resto1)
 
 no_alarma <- all_df %>% filter(!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
 
-kable(no_alarma %>% summarise(media_no_alarma_LAeq=mean(no_alarma$LAeq),
+no_alarma1 <- no_alarma %>% summarise(media_no_alarma_LAeq=mean(no_alarma$LAeq),
                     media_no_alarma_LAeq_d=mean(no_alarma$LAeq_d),
                     media_no_alarma_LAeq_den=mean(no_alarma$LAeq_den),
                     media_no_alarma_LAeq_e=mean(no_alarma$LAeq_e),
@@ -95,7 +141,8 @@ kable(no_alarma %>% summarise(media_no_alarma_LAeq=mean(no_alarma$LAeq),
                     maximo_no_alarma_LAeq_d=max(no_alarma$LAeq_d),
                     maximo_no_alarma_LAeq_den=max(no_alarma$LAeq_den),
                     maximo_no_alarma_LAeq_e=max(no_alarma$LAeq_e),
-                    maximo_no_alarma_LAeq_n=max(no_alarma$LAeq_n)))
+                    maximo_no_alarma_LAeq_n=max(no_alarma$LAeq_n))
+kable(no_alarma1)
 ```
 
 
@@ -165,6 +212,43 @@ Outliers5 <- all_df6 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T
 kable(Outliers5)
 
 ```
+
+```{r}
+m <- mascleta%>%select(ends_with("LAeq"))%>%rename(mascleta = "LAeq")%>%pivot_longer(cols="mascleta",names_to= "temporada",values_to = "valores")
+f <- fallas%>%select(ends_with("LAeq"))%>%rename(fallas = "LAeq")%>%pivot_longer(cols="fallas",names_to= "temporada",values_to = "valores")
+v <- verano%>%select(ends_with("LAeq"))%>%rename(verano = "LAeq")%>%pivot_longer(cols="verano",names_to= "temporada",values_to = "valores")
+a <- alarma%>%select(ends_with("LAeq"))%>%rename(alarma = "LAeq")%>%pivot_longer(cols="alarma",names_to= "temporada",values_to = "valores")
+n <- navidad%>%select(ends_with("LAeq"))%>%rename(navidad = "LAeq") %>%pivot_longer(cols="navidad",names_to= "temporada",values_to = "valores")
+n.a <- no_alarma%>%select(ends_with("LAeq"))%>%rename(no_alarma = "LAeq")%>%pivot_longer(cols="no_alarma",names_to= "temporada",values_to = "valores")
+p <- pascua%>%select(ends_with("LAeq"))%>%rename(pascua = "LAeq")%>%pivot_longer(cols="pascua",names_to= "temporada",values_to = "valores")
+r <- resto%>%select(ends_with("LAeq"))%>%rename(resto = "LAeq")%>%pivot_longer(cols="resto",names_to= "temporada",values_to = "valores")
+
+z <- rbind(m,f)
+z <- rbind(z,v)
+z <- rbind(z,a)
+z <- rbind(z,n)
+z <- rbind(z,n.a)
+z <- rbind(z,p)
+z <- rbind(z,r)
+# 
+# k <- c(1:dim(m)[1])
+# k <- c(k,1:dim(f)[1])
+# k <- c(k,1:dim(v)[1])
+# k <- c(k,1:dim(a)[1])
+# k <- c(k,1:dim(n)[1])
+# k <- c(k,1:dim(n.a)[1])
+# k <- c(k,1:dim(p)[1])
+# k <- c(k,1:dim(r)[1])
+# 
+# s <- cbind(z,k)
+
+k <- c(1:dim(z)[1])
+z <- cbind(z,k)
+
+ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","brown2","coral1","mediumorchid","cyan3"))
+ggplot(z, aes(x = k, y = valores, color = temporada)) +geom_violin()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","brown2","coral1","mediumorchid","cyan3"))
+```
+
 +
 ```{r}
 
@@ -178,8 +262,6 @@ barplot(v2,col= alpha("aquamarine2",0.9), add=T)
 barplot(v3,col=alpha("mediumorchid1",0.8), add=T)
 barplot(v4,col=alpha("mediumpurple4",0.7), add=T)
 barplot(v5,col=alpha("paleturquoise",0.6), add=T)
-
-
 
 ```
 
