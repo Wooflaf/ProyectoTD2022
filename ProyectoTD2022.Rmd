@@ -1,7 +1,7 @@
 ---
 title: "Proyecto TD 2022"
 subtitle: Tratamiento de Datos. Grado en Ciencia de Datos- UV
-author: "Olaf Meneses, Rubén Sales"
+author: "Olaf Meneses, Rubén Sales,Luna Moreno,Wilson Portillo, Carles Pascual"
 date:  "`r Sys.Date()`"
  
 params:
