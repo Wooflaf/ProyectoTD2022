@@ -174,7 +174,7 @@ A continuación se muestra una tabla explicativa del nombre abreviado asignado a
 # Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
 source("tablas_informativas.R", encoding = "UTF-8")
 kbl(nombres_calle) %>%
-  kable_material(full_width = F)
+  kable_material(full_width = F) 
 ```
 
 # Carga de datos
@@ -317,3 +317,16 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 ```
 
 # Conclusiones finales
+Para concluir, haremos un repaso general de las conclusiones que hemos extraído de los distintos gráficos y tablas.
+
+* Los niveles de ruido son muy altos, en la mayoría de casos por encima o cerca de los 55 dB, límite máximo permisible para zonas residenciales.
+
+* Una mayor presencia de bares y restaurantes indica unos niveles de ruido mayores.
+
+* Al contrario no siempre sucede. Hay otros factores, como estar próximo a una vía transitada, que influyen en los niveles de ruido.
+
+* Tras el fin de las restricciones Covid para el ocio nocturno, los niveles de ruido por la tarde y noche aumentan considerablemente.
+
+* Los días de Fallas son los que concentran los valores más altos de ruido para todos los sensores.
+
+* Hemos desarrollado una aplicación web que puede ser de utilidad para el ciudadano. Permite visualizar los datos de los sensores y configurar la visualización a su gusto, además de incluir una representación geográfica de los sensores y servicios de hostelería próximos.
