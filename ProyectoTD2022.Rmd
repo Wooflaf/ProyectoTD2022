@@ -1,7 +1,7 @@
 ---
 title: "Proyecto TD 2022"
 subtitle: Tratamiento de Datos. Grado en Ciencia de Datos- UV
-author: "Olaf Meneses, Rubén Sales,Luna Moreno,Wilson Portillo, Carles Pascual"
+author: "Olaf Meneses, Rubén Sales, Luna Moreno, Wilson Portillo, Carles Pascual"
 date:  "`r Sys.Date()`"
  
 params:
@@ -82,6 +82,10 @@ search()
 
 ```
 
+```{r tablas_informativas, include = FALSE}
+# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
+source("tablas_informativas.R")
+```
 # Introducción
 
 Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situados en distintas calles del barrio de Ruzafa. A través de la visualización de distintas tablas y gráficos, veremos que los niveles de ruido son ciertamente elevados e intentaremos determinar por qué se dan estos niveles. Para ello, plantearemos preguntas que habremos de resolver con los datos, mediante distintas y variadas visualizaciones.
@@ -283,11 +287,15 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r lucia, child = c('ProyectoTD2022_lucia.Rmd'), eval = F}
+```{r luna, child = c('ProyectoTD2022_Luna.Rmd'), eval = T}
 
 ```
 
-```{r luna, child = c('ProyectoTD2022_luna.Rmd'), eval = F}
+```{r wilson, child = c('ProyectoTD2022_Wilson.Rmd'), eval = T}
+
+```
+
+```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = T}
 
 ```
 
@@ -295,10 +303,4 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = F}
-
-```
-
-```{r wilson, child = c('ProyectoTD2022_wilson.Rmd'), eval = F}
-
-```
+# Conclusiones finales
