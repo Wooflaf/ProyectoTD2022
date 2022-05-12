@@ -1,4 +1,4 @@
-## ANÁLISIS UNIVARIANTE
+# Análisis univariante
 
 + Estas fechas marcan el inicio y el final del registro de datos
 ```{r}
@@ -155,10 +155,10 @@ Fallas tiene las medias más altas pero el resto de días que no hay festivos ta
 
 $$ $$
 
-## ANÁLISIS BIVARIANTE
+# ¿Cómo el sonido es afectado por las diferentes épocas?
 
 +
-```{r}
+```{r,echo = FALSE}
 m <- mascleta%>%select(ends_with("LAeq"),dateObserved)%>%rename(mascleta = "LAeq")%>% pivot_longer(cols="mascleta",names_to= "temporada",values_to = "valores")
 f <- fallas%>%select(ends_with("LAeq"),dateObserved)%>%rename(fallas = "LAeq")%>%pivot_longer(cols="fallas",names_to= "temporada",values_to = "valores")
 v <- verano%>%select(ends_with("LAeq"),dateObserved)%>%rename(verano = "LAeq")%>%pivot_longer(cols="verano",names_to= "temporada",values_to = "valores")
@@ -181,6 +181,10 @@ z <- rbind(z,r)
 ```{r}
 ggplot(z, aes(x = dateObserved, y = valores, color = temporada)) +geom_line()+ geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))+labs(title = "Gráfico de nivel sonoro continuo equivalente por día",x= "Fecha",y="dB")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x=element_text(angle=90)) +
   scale_x_date(date_breaks = "1 month")
+```
+
+
+```{r, echo=FALSE}
 ggsave("figure/Grafica1.jpg")
 ```
 Se puede observar que hay datos faltantes en julio y agosto del 2021.
@@ -277,6 +281,10 @@ o <- o%>% filter(outliers_encontrados=="TRUE")
 
 ```{r}
 ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.text.x=element_text(angle=90))+ labs(title = "Outliers encontrados aplicando cada regla",x="",y="dB ")
+```
+
+
+```{r,echo=FALSE}
 ggsave("figure/Grafica2.jpg")
 ```
 El método percentil es el que menos variación tolera ya que es el que más outliers detecta.
