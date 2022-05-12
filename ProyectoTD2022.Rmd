@@ -82,10 +82,6 @@ search()
 
 ```
 
-```{r tablas_informativas, include = FALSE}
-# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
-source("tablas_informativas.R")
-```
 # Introducción
 
 Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situados en distintas calles del barrio de Ruzafa. A través de la visualización de distintas tablas y gráficos, veremos que los niveles de ruido son ciertamente elevados e intentaremos determinar por qué se dan estos niveles. Para ello, plantearemos preguntas que habremos de resolver con los datos, mediante distintas y variadas visualizaciones.
@@ -171,6 +167,16 @@ for(i in seq_along(urls)){
 }
 ```
 
+## Nombres de los sensores
+A continuación se muestra una tabla explicativa del nombre abreviado asignado a cada sensor y a qué calle corresponde para facilitar la comprensión.
+
+```{r tablas_informativas, echo = FALSE}
+# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
+source("tablas_informativas.R", encoding = "UTF-8")
+kbl(nombres_calle) %>% 
+  kable_material(full_width = F)
+```
+
 # Carga de datos
 
 Para los datos de cada sensor, los hemos almacenado en dataframes independientes. Además hemos añadido una columna con el nombre abreviado de la calle donde se ubica cada uno, para una más fácil identificación.
@@ -213,7 +219,7 @@ all_df %<>%
 Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erróneos, o que faltan.
 
 ```{r}
-skim(all_df)
+kable(skim(all_df))
 ```
 
 Observamos que no hay valores faltantes (`n_missing`). Lo interesante de aquí es que hay valores infinitos en algunas variables numéricas. El resto de variables parecen no contener errores. Procedemos a identificar estos registros.
@@ -258,7 +264,7 @@ complete_data %>%
   ggplot(aes(x = fct_reorder(street, n), n)) +
   geom_col() +
   geom_text(aes(label = n), vjust = -0.5, size = 4) + 
-  coord_cartesian(ylim = c(-5, 190)) +
+  coord_cartesian(ylim = c(-5, 200)) +
   labs(x = "Calle", y = "Registros faltantes", 
        title = "Número de registros faltantes por sensor") +
   theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90))
