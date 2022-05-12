@@ -1,6 +1,4 @@
-# DISTRIBUCION DEL RUIDO DEPENDIENDO DE LA CALLE
-
-¿Cómo se distribuye la variable LAeq según los diferentes sensores?
+# ¿Cómo se distribuye la variable LAeq según los diferentes sensores?
 
 Calculamos la media de los sensores por calle y hacemos un
 grafico donde veremos la distribución del ruido en las
@@ -11,21 +9,22 @@ diferentes calles.
 
 means <- all_df %>% 
   group_by(street) %>% 
-  summarise(mean_LAeq_n = mean(LAeq_n)) %>% 
-  arrange(mean_LAeq_n) 
+  summarise(mean_LAeq = mean(LAeq)) %>% 
+  arrange(mean_LAeq) 
 
 all_df %>%
-  ggplot( aes(y=factor(street, levels = means$street), x=LAeq_n,  fill=factor(street, levels = means$street))) +
-    geom_density_ridges(alpha=0.6, bandwidth=4) +
-    scale_fill_viridis(discrete=TRUE) +
-    scale_color_viridis(discrete=TRUE) +
-    theme(
-      legend.position="none",
-      panel.spacing = unit(0.1, "lines"),
-      strip.text.x = element_text(size = 8)
-    ) +
-    xlab("") +
-    ylab("Assigned Probability (%)")
+  ggplot( aes(y=factor(street, levels = means$street), x=LAeq,  fill=factor(street, levels = means$street))) +
+  geom_density_ridges(alpha=0.6, bandwidth=4) +
+  scale_fill_viridis(discrete=TRUE) +
+  scale_color_viridis(discrete=TRUE) +
+  theme(
+    legend.position="none",
+    panel.spacing = unit(0.1, "lines"),
+    strip.text.x = element_text(size = 8)
+  ) +
+  labs(title = "Estimación de densidad de LAeq para cada sensor",
+       xlab = "LAeq") +
+  ylab("")
 
 ```
 
