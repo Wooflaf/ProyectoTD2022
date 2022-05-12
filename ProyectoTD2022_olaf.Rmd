@@ -150,7 +150,7 @@ El objetivo de esto es que no haya unas preguntas fijas que nosotros contestamos
 
 La aplicación está disponible a través del siguiente enlace:
 
-```{r shiny-data}
+```{r shiny-data, include = F}
 # Guardamos las variables que serán utilizadas en la aplicación Shiny en un .RData que posteriormente cargaremos.
 save(list = c("ids", "all_df", "hosteleria", "all_df_ubi_median"),
      file = "./RuidoRuzafaShiny/data/data.RData")
