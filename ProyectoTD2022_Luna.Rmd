@@ -157,7 +157,7 @@ $$ $$
 
 # ¿Cómo el sonido es afectado por las diferentes épocas?
 
-+
+
 ```{r,echo = FALSE}
 m <- mascleta%>%select(ends_with("LAeq"),dateObserved)%>%rename(mascleta = "LAeq")%>% pivot_longer(cols="mascleta",names_to= "temporada",values_to = "valores")
 f <- fallas%>%select(ends_with("LAeq"),dateObserved)%>%rename(fallas = "LAeq")%>%pivot_longer(cols="fallas",names_to= "temporada",values_to = "valores")
@@ -197,7 +197,7 @@ Nos damos cuenta de que en condiciones normales el nivel de ruido ya está por e
 
 $$ $$
 
-## OUTLIERS
+# Detección outliers
 
 + Contamos los outliers que hay por diferentes métodos y los mostramos
 ```{r}
