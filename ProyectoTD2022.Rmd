@@ -1,7 +1,7 @@
 ---
 title: "Proyecto TD 2022"
 subtitle: Tratamiento de Datos. Grado en Ciencia de Datos- UV
-author: "Olaf Meneses, Rubén Sales,Luna Moreno,Wilson Portillo, Carles Pascual"
+author: "Olaf Meneses, Rubén Sales, Luna Moreno, Wilson Portillo, Carles Pascual"
 date:  "`r Sys.Date()`"
  
 params:
@@ -283,15 +283,11 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r lucia, child = c('ProyectoTD2022_lucia.Rmd'), eval = F}
-
-```
-
 ```{r luna, child = c('ProyectoTD2022_Luna.Rmd'), eval = T}
 
 ```
 
-```{r olaf, child = c('ProyectoTD2022_olaf.Rmd'), eval = T}
+```{r wilson, child = c('ProyectoTD2022_Wilson.Rmd'), eval = T}
 
 ```
 
@@ -299,6 +295,8 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r wilson, child = c('ProyectoTD2022_Wilson.Rmd'), eval = T}
+```{r olaf, child = c('ProyectoTD2022_olaf.Rmd'), eval = T}
 
 ```
+
+# Conclusiones finales
