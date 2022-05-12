@@ -1,4 +1,4 @@
-ANALISIS UNIVARIANTE
+#ANALISIS UNIVARIANTE
 
 Creamos la tabla de estadisticos con los estadisticos
 requeridos
@@ -40,7 +40,7 @@ g + geom_violin(aes(y = LAeq_n))
 ```
 
 
-ANALISIS BIVARIANTE
+#ANALISIS BIVARIANTE
 
 ```{r}
 
@@ -53,7 +53,7 @@ ggpairs(all_df,columns = 2:5, aes(color = street,alpha = 0.5),
 ```
 
 
-1.- ¿Existe algun incremento del ruido nocturno en los meses que más turistas recibió Valencia ?
+#1.- ¿Existe algun incremento del ruido nocturno en los meses que más turistas recibió Valencia ?
 
 Mediante los datos obtenidos del INE observamos que los meses
 donde mas visitantes recibió Valencia fueron Agosto y
@@ -102,5 +102,12 @@ ggplot(medias_noche_2021, aes(x = Date, y = Media_Noche, fill = Turistas)) +
 
 ```
 
-
+Podemos observar que por más que Agosto es el mes donde más
+turistas llegaron, la media de ruido de todos los meses se
+mantiene casi constante, incluso en aquellos meses donde menos
+turistas se reciben.
+Pero apreciamos con un ligero incremento respecto de las demás
+en Septiembre.
+Por lo cual la llegada de los turistas no supone un incremento
+importante en el ruido nocturno.
  

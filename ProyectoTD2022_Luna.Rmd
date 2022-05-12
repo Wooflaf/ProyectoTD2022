@@ -5,47 +5,33 @@
 a <- all_df%>%arrange(dateObserved)%>% summarise(inicio = dateObserved[1],final=dateObserved[dim(all_df)[1]])
 kable(a)
 ```
-Organizamos las observaciones del data frame en sentido creciente y seleccionamos la primera y última columna. Como van creciendo, la primera observación marcará el inicio de la recogida de datos y la última , la finalización.
 
 $$ $$
 
-+ Máximos niveles de ruido por cada variable
++ Máximos,mínimos y media de los niveles de ruido por cada variable
 ```{r}
-kable(all_df %>% summarise(maximo_LAeq = max(all_df[,2]),maximo_LAeq_d=max(all_df[,3]),
-                     maximo_LAeq_den=max(all_df[,4]),maximo_LAeq_e=max(all_df[,5]),
-                     maximo_LAeq_n=max(all_df[,6])))
+max <- all_df %>% summarise("maximo/LAeq" = max(all_df[,2],round(2)),"maximo/LAeq_d"=max(all_df[,3],round(2)),"maximo/LAeq_den"=max(all_df[,4],round(2)),"maximo/LAeq_e"=max(all_df[,5],round(2)),"maximo/LAeq_n"=max(all_df[,6],round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "medida",values_to = "valores")%>%separate(medida,sep="/",into=c("medida","variable"))%>%pivot_wider(names_from = medida,values_from = valores)
+
+min <- all_df %>% summarise("minimo/LAeq" = min(all_df[,2]),"minimo/LAeq_d"=min(all_df[,3]),"minimo/LAeq_den"=min(all_df[,4]),"minimo/LAeq_e"=min(all_df[,5]),"minimo/LAeq_n"=min(all_df[,6]))%>% pivot_longer(cols=contains("LAeq"),names_to= "medida",values_to = "valores")%>%separate(medida,sep="/",into=c("medida","variable"))%>%pivot_wider(names_from = medida,values_from = valores)
+
+mean <- all_df %>% na.omit %>% summarise("media/LAeq" = max(all_df[,2],round(2)),"media/LAeq_d"=max(all_df[,3],round(2)),"media/LAeq_den"=max(all_df[,4],round(2)),"media/LAeq_e"=max(all_df[,5],round(2)),"media/LAeq_n"=max(all_df[,6],round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "medida",values_to = "valores")%>%separate(medida,sep="/",into=c("medida","variable"))%>%pivot_wider(names_from = medida,values_from = valores)
+
 
 ```
-De las columnas con las variables numéricas que queremos saber el máximo, aplicamos max(). Con la función summarise(), creamos un nuevo data frame donde cada columna será el máximo para cada variable seleccionada.
 
-$$ $$
-
-+ Mínimos registrados en cada variable
 ```{r}
-kable(all_df %>% summarise(minimo_LAeq = min(all_df[,2]),minimo_LAeq_d=min(all_df[,3]),
-                     minimo_LAeq_den=min(all_df[,4]),minimo_LAeq_e=min(all_df[,5]),
-                     minimo_LAeq_n=min(all_df[,6])))
+kable(cbind(max,min[2],mean[2]))
+
 ```
-De las columnas con las variables numéricas que queremos saber el mínimo, aplicamos min(). Con la función summarise(), creamos un nuevo data frame donde cada columna será el mínimo para cada variable seleccionada.
 
 
-$$ $$
-
-
-+ Media para cada variable numérica
-```{r}
-kable(all_df %>% na.omit %>%summarise(media_LAeq=mean(all_df$LAeq),
-                                media_LAeq_d=mean(all_df$LAeq_d),
-                                media_LAeq_den=mean(all_df$LAeq_den),
-                                media_LAeq_e=mean(all_df$LAeq_e),
-                                media_LAeq_n=mean(all_df$LAeq_n)))
-```
-De las columnas con las variables numéricas que queremos saber la media, aplicamos mean(). Con la función summarise(), creamos un nuevo data frame donde cada columna será la media para cada variable seleccionada.
+Podemos observar que en la noche, el mínimo es mucho más bajo que en el resto del día.
+La molestia mínima que notaríamos, es el valor más alto de todos los mínimos.
 
 $$ $$
 
 + Medias y máximo para los días con mascletà, días de fallas, con el estado de alarma activo,pascua, navidad . verano ,el resto de días que no pertenecen a lo anteriormente nombrado y cuando ya se terminó el estado de alarma.
-```{r}
+```{r,echo=FALSE}
 mascleta <- all_df %>% filter(between(dateObserved, ymd("2022-03-01"),ymd("2022-03-13"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
 mascleta1 <- mascleta%>% summarise("media/mascleta/LAeq"=mean(mascleta$LAeq,round(2)),
@@ -57,7 +43,7 @@ mascleta1 <- mascleta%>% summarise("media/mascleta/LAeq"=mean(mascleta$LAeq,roun
                     "maximo/mascleta/LAeq_d"=max(mascleta$LAeq_d,round(2)),
                     "maximo/mascleta/LAeq_den"=max(mascleta$LAeq_den,round(2)),
                     "maximo/mascleta/LAeq_e"=max(mascleta$LAeq_e,round(2)),
-                    "maximo/mascleta/LAeq_n"=max(mascleta$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/mascleta/LAeq_n"=max(mascleta$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 fallas <- all_df %>% filter(between(dateObserved, ymd("2022-03-14"),ymd("2022-03-19"))|between(dateObserved, ymd("2021-09-01"),ymd("2021-09-05")))
 
@@ -70,7 +56,7 @@ fallas1 <-fallas%>% summarise("media/fallas/LAeq"=mean(fallas$LAeq,round(2)),
                     "maximo/fallas/LAeq_d"=max(fallas$LAeq_d,round(2)),
                     "maximo/fallas/LAeq_den"=max(fallas$LAeq_den,round(2)),
                     "maximo/fallas/LAeq_e"=max(fallas$LAeq_e,round(2)),
-                    "maximo/fallas/LAeq_n"=max(fallas$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/fallas/LAeq_n"=max(fallas$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 alarma<- all_df %>% filter(between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
 
@@ -83,7 +69,7 @@ alarma1 <- alarma %>% summarise("media/alarma/LAeq"=mean(alarma$LAeq,round(2)),
                     "maximo/alarma/LAeq_d"=max(alarma$LAeq_d,round(2)),
                     "maximo/alarma/LAeq_den"=max(alarma$LAeq_den,round(2)),
                     "maximo/alarma/LAeq_e"=max(alarma$LAeq_e,round(2)),
-                    "maximo/alarma/LAeq_n"=max(alarma$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/alarma/LAeq_n"=max(alarma$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 navidad <- all_df %>% filter(between(dateObserved, ymd("2020-12-23"),ymd("2021-01-06"))|between(dateObserved, ymd("2021-12-23"),ymd("2022-01-06")))
 
@@ -96,7 +82,7 @@ navidad1 <- navidad %>% summarise("media/navidad/LAeq"=mean(navidad$LAeq,round(2
                     "maximo/navidad/LAeq_d"=max(navidad$LAeq_d,round(2)),
                     "maximo/navidad/LAeq_den"=max(navidad$LAeq_den,round(2)),
                     "maximo/navidad/LAeq_e"=max(navidad$LAeq_e,round(2)),
-                    "maximo/navidad/LAeq_n"=max(navidad$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/navidad/LAeq_n"=max(navidad$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 
 pascua <- all_df %>% filter(between(dateObserved, ymd("2021-04-01"),ymd("2021-04-12"))|between(dateObserved, ymd("2022-04-14"),ymd("2022-04-24")))
@@ -110,7 +96,7 @@ pascua1 <- pascua %>% summarise("media/pascua/LAeq"=mean(pascua$LAeq,round(2)),
                     "maximo/pascua/LAeq_d"=max(pascua$LAeq_d,round(2)),
                     "maximo/pascua/LAeq_den"=max(pascua$LAeq_den,round(2)),
                     "maximo/pascua/LAeq_e"=max(pascua$LAeq_e,round(2)),
-                    "maximo/pascua/LAeq_n"=max(pascua$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/pascua/LAeq_n"=max(pascua$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 verano <- all_df %>% filter(between(dateObserved, ymd("2021-06-01"),ymd("2021-09-01")))
 
@@ -123,7 +109,7 @@ verano1 <- verano %>% summarise("media/verano/LAeq"=mean(verano$LAeq,round(2)),
                     "maximo/verano/LAeq_d"=max(verano$LAeq_d,round(2)),
                     "maximo/verano/LAeq_den"=max(verano$LAeq_den,round(2)),
                     "maximo/verano/LAeq_e"=max(verano$LAeq_e,round(2)),
-                    "maximo/verano/LAeq_n"=max(verano$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/verano/LAeq_n"=max(verano$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 resto <- all_df %>% filter(!between(dateObserved,ymd("2022-03-01"),ymd("2022-03-19"))&!between(dateObserved,ymd("2021-09-01"),ymd("2021-09-05"))&!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08"))&!(between(dateObserved, ymd("2020-12-23"),ymd("2021-01-06"))&!between(dateObserved, ymd("2021-12-23"),ymd("2022-01-06"))&!(between(dateObserved, ymd("2021-04-01"),ymd("2021-04-12"))&!between(dateObserved, ymd("2022-04-14"),ymd("2022-04-24"))&!between(dateObserved, ymd("2021-06-01"),ymd("2021-09-01")))))
 
@@ -136,7 +122,7 @@ resto1 <- resto %>% summarise("media/resto/LAeq"=mean(resto$LAeq,round(2)),
                     "maximo/resto/LAeq_d"=max(resto$LAeq_d,round(2)),
                     "maximo/resto/LAeq_den"=max(resto$LAeq_den,round(2)),
                     "maximo/resto/LAeq_e"=max(resto$LAeq_e,round(2)),
-                    "maximo/resto/LAeq_n"=max(resto$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/resto/LAeq_n"=max(resto$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 no_alarma <- all_df %>% filter(!between(dateObserved, ymd("2020-03-13"),ymd("2020-11-08")))
 
@@ -149,13 +135,25 @@ no_alarma1 <- no_alarma %>% summarise("media/no_alarma/LAeq"=mean(no_alarma$LAeq
                     "maximo/no_alarma/LAeq_d"=max(no_alarma$LAeq_d,round(2)),
                     "maximo/no_alarma/LAeq_den"=max(no_alarma$LAeq_den,round(2)),
                     "maximo/no_alarma/LAeq_e"=max(no_alarma$LAeq_e,round(2)),
-                    "maximo/no_alarma/LAeq_n"=max(no_alarma$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("variable","temporada","dato"))%>%pivot_wider(names_from = temporada,values_from = valores)
+                    "maximo/no_alarma/LAeq_n"=max(no_alarma$LAeq_n,round(2)))%>% pivot_longer(cols=contains("LAeq"),names_to= "temporada",values_to = "valores")%>%separate(temporada,sep="/",into=c("medida","temporada","variable"))%>%pivot_wider(names_from = temporada,values_from = valores)
 
 ```
 
 ```{r}
-kable(cbind(mascleta1,fallas1[3],alarma1[3],navidad1[3],pascua1[3],verano1[3],resto1[3],no_alarma1[3]))
+kable(cbind(mascleta1,fallas1[3],navidad1[3],pascua1[3],verano1[3],resto1[3],alarma1[3],no_alarma1[3]))
 ```
+
+
+Se puede observar que los máximos niveles de ruido se encuentran en la tarde-noche de los días de fallasa y días de marzo que hay mascletà.
+
+
+Comparando los valores de cuando había estado de alarma y cuando se levantó, en los máximos se diferencian por 20 dB aprox.En las medias, no difieren tanto.
+
+
+Fallas tiene las medias más altas pero el resto de días que no hay festivos tampoco varía mucho respecto a vacaciones como navidad o pascua.
+
+
+$$ $$
 
 ## ANÁLISIS BIVARIANTE
 
@@ -181,10 +179,19 @@ z <- rbind(z,r)
 
 
 ```{r}
-ggplot(z, aes(x = dateObserved, y = valores, color = temporada)) +geom_line()+geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))+labs(title = "Gráfico de nivel sonoro continuo equivalente por día",x= "Fecha",y="dB")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x=element_text(angle=90)) +
+ggplot(z, aes(x = dateObserved, y = valores, color = temporada)) +geom_line()+ geom_hline(size=1.5,yintercept = 65) +guides(color = guide_legend(title = "Temporada"))+scale_color_manual(values = c("firebrick1","dodgerblue1",                     "gold","seagreen","pink","coral1","mediumorchid","cyan3"))+labs(title = "Gráfico de nivel sonoro continuo equivalente por día",x= "Fecha",y="dB")+theme(plot.title = element_text(hjust = 0.5))+theme(axis.text.x=element_text(angle=90)) +
   scale_x_date(date_breaks = "1 month")
+ggsave("figure/Grafica1.jpg")
 ```
+Se puede observar que hay datos faltantes en julio y agosto del 2021.
 
+
+La época de marzo 2022 tiene unos niveles muy altos de ruido, siendo que se celebran las fallas. En septiempre 2021 también hay niveles de ruido muy altos debido a las fallas que se celebraron en esa época.
+
+
+Nos damos cuenta de que en condiciones normales el nivel de ruido ya está por encima de lo recomendado como saludable.
+
+$$ $$
 
 ## OUTLIERS
 
@@ -225,7 +232,7 @@ return(res)
 ```
 
 
-```{r}
+```{r,echo=FALSE}
 metodos <- list(reglasigma=reglasigma,reglahampel=reglahampel,reglaboxplot=reglaboxplot,reglapercentil=reglapercentil)
 
 all_df2 <- all_df %>% mutate(across(LAeq,metodos))
@@ -253,7 +260,7 @@ Outliers4 <- all_df6 %>% select(contains("regla")) %>% summarize_all(sum,na.rm=T
 kable(rbind(Outliers1,Outliers1[1,],Outliers2[1,],Outliers3[1,],Outliers4[1,]))
 ```
 
-+
+
 ```{r}
 o <- all_df2 %>% select(contains("regla"))%>% pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
 o1 <- all_df3 %>% select(contains("regla")) %>% pivot_longer(cols=contains("regla"),names_to= "regla",values_to = "outliers_encontrados")%>%separate(regla,sep="_regla",into=c("dato","regla"))
@@ -269,16 +276,14 @@ o <- o%>% filter(outliers_encontrados=="TRUE")
 
 
 ```{r}
-ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.text.x=element_text(angle=90))+ labs(title = "Outliers encontrados aplicando cada regla",x="",y="dB ",caption = "LAeq= nivel sonoro continuo equivalente
-
-                                                                                                                   LAeq_d = desde las 07h hasta las 19h
-                                                                                                                   
-                                                                                                                   LAeq_den = molestia vinculada al nivel de ruido
-                                                                                                                   
-                                                                                                                   LAeq_e = desde las 19h hasta las 23h
-                                                                                                                   
-                                                                                                                   LAeq_n= desde las 23h hasta las 07h") 
-
+ggplot(o, aes(x = dato,fill=regla)) +geom_bar(position = "dodge2")+theme(axis.text.x=element_text(angle=90))+ labs(title = "Outliers encontrados aplicando cada regla",x="",y="dB ")
+ggsave("figure/Grafica2.jpg")
 ```
+El método percentil es el que menos variación tolera ya que es el que más outliers detecta.
 
+
+Por el contrario el método sigma es el que menos outliers encuentra.
+
+
+El boxplot y el hampel van muy parejos respecto a los resultados obtenidos.
 
