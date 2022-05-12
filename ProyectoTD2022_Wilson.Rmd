@@ -1,6 +1,7 @@
 ANALISIS UNIVARIANTE
 
-Creamos la tabla de estadisticos con los estadisticos requeridos
+Creamos la tabla de estadisticos con los estadisticos
+requeridos
 
 ```{r}
 
@@ -20,7 +21,9 @@ all_df %>%
 
 
 
-Con los siguientes diagramas podemos ver la distribución de los datos, mostrando los picos de valores y donde se suelen agrupar la mayoria de los datos.
+Con los siguientes diagramas podemos ver la distribución de los
+datos, mostrando los picos de valores y donde se suelen agrupar
+la mayoria de los datos.
 
 ```{r}
 g  <- ggplot(all_df, aes(dateObserved, fill = street )) +
@@ -44,14 +47,18 @@ ANALISIS BIVARIANTE
 ggpairs(all_df, columns = 2:5)
 
 #Realizamos un análisis por calle de los datos 
-ggpairs(all_df,columns = 2:5, aes(color = street,alpha = 0.5), upper = list(continuous = wrap("cor", size = 1.85)))
+ggpairs(all_df,columns = 2:5, aes(color = street,alpha = 0.5),
+      upper = list(continuous = wrap("cor", size = 1.85)))
 
 ```
 
 
 1.- ¿Existe algun incremento del ruido nocturno en los meses que más turistas recibió Valencia ?
 
-Mediante los datos obtenidos del INE observamos que los meses donde mas visitantes recibió Valencia fueron Agosto y Septiembre, mientras los que menos visitantes recibió fueron Febrero y Marzo.
+Mediante los datos obtenidos del INE observamos que los meses
+donde mas visitantes recibió Valencia fueron Agosto y
+Septiembre, mientras los que menos visitantes recibió fueron
+Febrero y Marzo.
 
 Calculamos la media de todos los meses
 
@@ -62,7 +69,38 @@ medias_noche <-complete_data %>%
   select(street, ends_with("d"), Date) %>%
   group_by(Date) %>%
   summarise(Media_Noche =  mean(LAeq_d, na.rm = T))
+  
+#Seleccionamos todos los meses de 2021
+medias_noche_2021 <- medias_noche[5:15,] 
 
 ```
+
+Añadimos los visitantes que recibe Valencia (información
+extraida del INE)
+
+```{r}
+medias_noche_2021 <- cbind(medias_noche_2021, 
+    Turistas = c(49970, 28152, 46945, 71493, 141587, 271231,
+              754050, 641919, 641582,384253, 381422))
+
+```
+
+Graficamos los valores obtenidos
+
+```{r}
+
+ggplot(medias_noche_2021, aes(x = Date, y = Media_Noche, fill = Turistas)) +
+  scale_fill_distiller(direction = 1) +
+  geom_bar(stat="identity", position="dodge") +
+  labs(x = "Meses Del Año" , y = "Ruido Nocturno") +
+   geom_text(
+        aes(label = paste(as.character(Turistas), "Turistas", sep = " ")), 
+        position = position_dodge(width = 0.9),
+        hjust =  1.5,
+        angle = 90,
+        fontface = 2)
+
+```
+
 
  
