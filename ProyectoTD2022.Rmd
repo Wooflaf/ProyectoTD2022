@@ -173,7 +173,7 @@ A continuación se muestra una tabla explicativa del nombre abreviado asignado a
 ```{r tablas_informativas, echo = FALSE}
 # Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
 source("tablas_informativas.R", encoding = "UTF-8")
-kbl(nombres_calle) %>% 
+kbl(nombres_calle) %>%
   kable_material(full_width = F)
 ```
 
@@ -216,10 +216,11 @@ all_df %<>%
 
 ## Valores erróneos
 
-Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erróneos, o que faltan.
+Generamos un resumen genérico del dataframe para tener una idea de qué datos pueden ser erróneos, o que faltan.
 
 ```{r}
-kable(skim(all_df))
+my_skim <- skim_with(numeric = sfl(hist = NULL))
+my_skim(all_df)
 ```
 
 Observamos que no hay valores faltantes (`n_missing`). Lo interesante de aquí es que hay valores infinitos en algunas variables numéricas. El resto de variables parecen no contener errores. Procedemos a identificar estos registros.
