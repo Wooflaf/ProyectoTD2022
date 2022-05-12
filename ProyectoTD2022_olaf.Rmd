@@ -67,7 +67,7 @@ Utilizaremos este dataframe para la visualización geográfica. Notar que se mue
 ## Visualización geográfica
 ```{r icons_infobox, echo = FALSE}
 # Cargamos de un script los iconos que utilizaremos en la visualización geográfica, así como el texto que tendrá un botón informativo sobre la visualización
-source("leaflet_icons_infobox.R")
+source("leaflet_icons_infobox.R", encoding = "UTF-8")
 ```
 
 ```{r leaflet, echo = FALSE}
