@@ -197,7 +197,7 @@ Nos damos cuenta de que en condiciones normales el nivel de ruido ya está por e
 
 $$ $$
 
-# Detección outliers
+# Detección de outliers
 
 + Contamos los outliers que hay por diferentes métodos y los mostramos
 ```{r}
