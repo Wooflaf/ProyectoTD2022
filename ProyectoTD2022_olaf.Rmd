@@ -65,12 +65,12 @@ all_df_ubi_median[1:8] %>%
 Utilizaremos este dataframe para la visualización geográfica. Notar que se muestran ya los diferentes niveles establecidos. La diferenciación entre ellos son los valores de la mediana de la variable `LAeq`. El nivel 3 es para valores mayores de 60.8, el nivel 2 si los valores están entre 59 y 60.8 y finalmente, el nivel 1, es para valores menores de 59.
 
 ## Visualización geográfica
-```{r icons_infobox}
+```{r icons_infobox, echo = FALSE}
 # Cargamos de un script los iconos que utilizaremos en la visualización geográfica, así como el texto que tendrá un botón informativo sobre la visualización
 source("leaflet_icons_infobox.R")
 ```
 
-```{r leaflet}
+```{r leaflet, echo = FALSE}
 all_df_ubi_median <- all_df_ubi_median %>% # Variable scaled: median_LAeq entre 0 y 1
   mutate(scaled = (median_LAeq - min(median_LAeq))/(max(median_LAeq)-min(median_LAeq)))
 
@@ -134,10 +134,6 @@ Si miramos un poco el mapa, no tardará en aflorar la pregunta: ¿por qué el se
 
 Es decir, el ruido que hace la gente en bares y restaurantes es una de las causas de estos altos niveles de ruido, pero también lo es el tráfico de vehículos. Sobre todo en las zonas más próximas a vías urbanas muy transitadas, como es el caso anterior.
 
-```{r tablas_informativas}
-# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
-source("tablas_informativas.R")
-```
 # Visualización interactiva
 Hemos creado una visualización que son varios mapas de calor, divididos por año y mes. 
 

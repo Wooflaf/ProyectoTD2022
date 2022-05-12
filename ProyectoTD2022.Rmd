@@ -82,6 +82,10 @@ search()
 
 ```
 
+```{r tablas_informativas, include = FALSE}
+# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
+source("tablas_informativas.R")
+```
 # Introducción
 
 Este proyecto tiene como objetivo analizar los datos de catorce sonómetros situados en distintas calles del barrio de Ruzafa. A través de la visualización de distintas tablas y gráficos, veremos que los niveles de ruido son ciertamente elevados e intentaremos determinar por qué se dan estos niveles. Para ello, plantearemos preguntas que habremos de resolver con los datos, mediante distintas y variadas visualizaciones.
