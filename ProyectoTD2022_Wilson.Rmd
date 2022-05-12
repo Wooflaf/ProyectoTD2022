@@ -1,59 +1,56 @@
-#ANALISIS UNIVARIANTE
+# DISTRIBUCION DEL RUIDO DEPENDIENDO DE LA CALLE
 
-Creamos la tabla de estadisticos con los estadisticos
-requeridos
+¿Cómo se distribuye la variable LAeq según los diferentes sensores?
+
+Calculamos la media de los sensores por calle y hacemos un
+grafico donde veremos la distribución del ruido en las
+diferentes calles.
+
 
 ```{r}
+
+means <- all_df %>% 
+  group_by(street) %>% 
+  summarise(mean_LAeq_n = mean(LAeq_n)) %>% 
+  arrange(mean_LAeq_n) 
 
 all_df %>%
-  group_by(street) %>%
-  select(2:6,8) %>% #Seleccionamos las calles con valores
-  summarize(across(everything(),(list(
-        vminimo = ~ min(., na.rm = TRUE),
-        mediana =~ mean(., na.rm = TRUE),
-        percentil25 = ~ quantile(., 0.25, na.rm =TRUE),
-        vmedio =~ median(., na.rm = TRUE),                
-        desviacion_tipica =~ sd(., na.rm = TRUE),
-        percentil75 =~ mean(., 0.75,  na.rm = TRUE),
-        vmaximo  =~ max(., na.rm = TRUE)))))
+  ggplot( aes(y=factor(street, levels = means$street), x=LAeq_n,  fill=factor(street, levels = means$street))) +
+    geom_density_ridges(alpha=0.6, bandwidth=4) +
+    scale_fill_viridis(discrete=TRUE) +
+    scale_color_viridis(discrete=TRUE) +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    ) +
+    xlab("") +
+    ylab("Assigned Probability (%)")
 
 ```
 
+El grafico nos permite observar que la mayoria de las calles 
+tienen un ruido promedio similar. 
+Resaltando cadiz3 por su promedio de ruido superior respecto 
+de las demás.
 
+# ¿De las variables numéricas, cuáles están más correlacionadas
 
-Con los siguientes diagramas podemos ver la distribución de los
-datos, mostrando los picos de valores y donde se suelen agrupar
-la mayoria de los datos.
-
-```{r}
-g  <- ggplot(all_df, aes(dateObserved, fill = street )) +
-  geom_hline(yintercept= 65, color = "red") +
-  scale_x_date(breaks = "6 months") +
-  facet_wrap(~street)
-
-g + geom_violin(aes(y = LAeq))
-g + geom_violin(aes(y = LAeq_d))
-g + geom_violin(aes(y = LAeq_den))
-g + geom_violin(aes(y = LAeq_e))
-g + geom_violin(aes(y = LAeq_n))
-
-```
-
-
-#ANALISIS BIVARIANTE
+Mediante el siguiente grafico podemos observar que tan 
+correlacionadas se encuentran las variables y si la densidad
+de valores son similares.
 
 ```{r}
 
 ggpairs(all_df, columns = 2:5)
 
-#Realizamos un análisis por calle de los datos 
-ggpairs(all_df,columns = 2:5, aes(color = street,alpha = 0.5),
-      upper = list(continuous = wrap("cor", size = 1.85)))
-
 ```
 
+Valores positivos tan altos de correlación nos indica que
+todas tienen una tendencia muy similar en cuanto al nivel de
+ruido.
 
-#1.- ¿Existe algun incremento del ruido nocturno en los meses que más turistas recibió Valencia ?
+# ¿Existe algun incremento del ruido nocturno en los meses que más turistas recibió Valencia ?
 
 Mediante los datos obtenidos del INE observamos que los meses
 donde mas visitantes recibió Valencia fueron Agosto y
@@ -102,7 +99,7 @@ ggplot(medias_noche_2021, aes(x = Date, y = Media_Noche, fill = Turistas)) +
 
 ```
 
-Podemos observar que por más que Agosto es el mes donde más
+Podemos observar que por más que Agosto es el mes donde más 
 turistas llegaron, la media de ruido de todos los meses se
 mantiene casi constante, incluso en aquellos meses donde menos
 turistas se reciben.
