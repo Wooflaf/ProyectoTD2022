@@ -2,27 +2,7 @@
 shinyServer(function(input, output, session) {
   # Dataframe adaptado para la visualización del mapa de calor
   rval_date <- reactive({
-    all_df %>%
-      group_by(entityId, street) %>%
-      complete(dateObserved = c(seq.Date(from = as.Date(input$date_rg[1]),
-                                         to = ultimo_dia_mes(input$date_rg[2]),
-                                         by = "day"))) %>%
-      mutate(year = year(dateObserved),
-             month = month(dateObserved, label = T, abbr = F),
-             weekdayf = factor(wday(dateObserved, label = T,
-                                    week_start = 1, abbr = F), ordered = T),
-             monthweek = ceiling(day(dateObserved) / 7)) %>%
-      pivot_longer(starts_with("LAeq"), 
-                   names_to = "medida", 
-                   values_to = "valor") %>%
-      mutate(text = ifelse(is.na(valor),
-                           paste0("Fecha: ", day(dateObserved)," de ",
-                                  month(dateObserved, label = T, abbr = F), " \n",
-                                  "No hay registro de este día"),
-                           paste0("Valor: ", valor, " dB\n", "Fecha: ",
-                                  day(dateObserved)," de ",
-                                  month(dateObserved, label = T, abbr = F), " \n",
-                                  "Día: ", str_to_title(weekdayf), " \n"))) %>%
+    date_df %>%
       filter(between(dateObserved, 
                      as.Date(input$date_rg[1]),
                      ultimo_dia_mes(input$date_rg[2])))
