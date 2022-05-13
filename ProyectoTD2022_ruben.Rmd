@@ -18,11 +18,21 @@ medias %>%
   ggplot(mapping = aes(x = Mes, y = Media_Mes_Dia)) +
   geom_line(aes(group=1, fill = "black"), size=1) +
   geom_point(aes(color = "red")) +
-  ggtitle("Ruido medio por mes") +
+  ggtitle("Ruido medio de día por mes") +
   ylab("Ruido de día") +
   theme(axis.text.x=element_text(angle=90), legend.position = "none")
   
+medias %>%
+  ggplot(mapping = aes(x = Mes, y = Media_Mes_Noche)) +
+  geom_line(aes(group=1, fill = "black"), size=1) +
+  geom_point(aes(color = "red")) +
+  ggtitle("Ruido medio de noche por mes") +
+  ylab("Ruido de noche") +
+  theme(axis.text.x=element_text(angle=90), legend.position = "none")
+
 ```
+
+Como se puede observar, ambos gráficos tienen una forma muy parecida, con dos picos destacables en marzo y septiembre.
 
 Ahora visualizaremos los datos en forma de tabla.
 
