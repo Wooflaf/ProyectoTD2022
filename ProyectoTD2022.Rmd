@@ -1,7 +1,7 @@
 ---
 title: "Proyecto TD 2022"
 subtitle: Tratamiento de Datos. Grado en Ciencia de Datos- UV
-author: "Olaf Meneses, Rubén Sales,Luna Moreno,Wilson Portillo"
+author: "Olaf Meneses, Rubén Sales, Luna Moreno, Wilson Portillo, Carles Pascual"
 date:  "`r Sys.Date()`"
  
 params:
@@ -167,6 +167,16 @@ for(i in seq_along(urls)){
 }
 ```
 
+## Nombres de los sensores
+A continuación se muestra una tabla explicativa del nombre abreviado asignado a cada sensor y a qué calle corresponde para facilitar la comprensión.
+
+```{r tablas_informativas, echo = FALSE}
+# Cargamos de un script tablas que servirán para informar sobre los nombres de las calles donde se ubican los sensores, las escalas de ruido...
+source("tablas_informativas.R", encoding = "UTF-8")
+kbl(nombres_calle) %>%
+  kable_material(full_width = F) 
+```
+
 # Carga de datos
 
 Para los datos de cada sensor, los hemos almacenado en dataframes independientes. Además hemos añadido una columna con el nombre abreviado de la calle donde se ubica cada uno, para una más fácil identificación.
@@ -192,6 +202,12 @@ rm(sueca_esq_denia, cadiz16, cadiz3, cuba3, sueca2, sueca61,
    sueca32, carlescervera_reina, salvador, vivons, carlescervera34,
    puertorico21, docserrano21, gen_prim)
 ```
+## Definición de las variables relacionadas con el sonido
+A continuación se muestra una tabla con las explicaciones proporcionadas por el Ayuntamiento de Valencia para las variables relacionadas con el sonido.
+```{r tablas_LAeq, echo = FALSE}
+kbl(explicacion_medidas) %>%
+  kable_material(full_width = F)
+```
 
 # Limpiado del dataframe
 
@@ -206,10 +222,11 @@ all_df %<>%
 
 ## Valores erróneos
 
-Generamos un resumen genérico del dataframe para tener una idea de que datos pueden ser erróneos, o que faltan.
+Generamos un resumen genérico del dataframe para tener una idea de qué datos pueden ser erróneos, o que faltan.
 
 ```{r}
-skim(all_df)
+my_skim <- skim_with(numeric = sfl(hist = NULL))
+my_skim(all_df)
 ```
 
 Observamos que no hay valores faltantes (`n_missing`). Lo interesante de aquí es que hay valores infinitos en algunas variables numéricas. El resto de variables parecen no contener errores. Procedemos a identificar estos registros.
@@ -254,7 +271,7 @@ complete_data %>%
   ggplot(aes(x = fct_reorder(street, n), n)) +
   geom_col() +
   geom_text(aes(label = n), vjust = -0.5, size = 4) + 
-  coord_cartesian(ylim = c(-5, 190)) +
+  coord_cartesian(ylim = c(-5, 200)) +
   labs(x = "Calle", y = "Registros faltantes", 
        title = "Número de registros faltantes por sensor") +
   theme(axis.text.x = element_text(hjust = 0.5, vjust = 0.5, angle=90))
@@ -283,11 +300,15 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r lucia, child = c('ProyectoTD2022_lucia.Rmd'), eval = F}
+```{r luna, child = c('ProyectoTD2022_Luna.Rmd'), eval = T}
 
 ```
 
-```{r luna, child = c('ProyectoTD2022_luna.Rmd'), eval = F}
+```{r wilson, child = c('ProyectoTD2022_Wilson.Rmd'), eval = T}
+
+```
+
+```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = T}
 
 ```
 
@@ -295,10 +316,17 @@ Observamos que hay sensores que tienen registros faltantes al inicio (sonómetro
 
 ```
 
-```{r ruben, child = c('ProyectoTD2022_ruben.Rmd'), eval = F}
+# Conclusiones finales
+Para concluir, haremos un repaso general de las conclusiones que hemos extraído de los distintos gráficos y tablas.
 
-```
+* Los niveles de ruido son muy altos, en la mayoría de casos por encima o cerca de los 55 dB, límite máximo permisible para zonas residenciales.
 
-```{r wilson, child = c('ProyectoTD2022_wilson.Rmd'), eval = F}
+* Una mayor presencia de bares y restaurantes indica unos niveles de ruido mayores.
 
-```
+* Al contrario no siempre sucede. Hay otros factores, como estar próximo a una vía transitada, que influyen en los niveles de ruido.
+
+* Tras el fin de las restricciones Covid para el ocio nocturno, los niveles de ruido por la tarde y noche aumentan considerablemente.
+
+* Los días de Fallas son los que concentran los valores más altos de ruido para todos los sensores.
+
+* Hemos desarrollado una aplicación web que puede ser de utilidad para el ciudadano. Permite visualizar los datos de los sensores y configurar la visualización a su gusto, además de incluir una representación geográfica de los sensores y servicios de hostelería próximos.
