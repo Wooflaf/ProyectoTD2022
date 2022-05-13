@@ -148,10 +148,36 @@ Las posibilidades de extraer información son mayores, ya que uno puede ir cambi
 
 El objetivo de esto es que no haya unas preguntas fijas que nosotros contestamos. Más bien todo lo contrario. Es el propio usuario quien debe plantear las preguntas e, interactuando con los distintos gráficos, pueda sacar sus conclusiones.
 
-La aplicación está disponible a través del siguiente enlace:
+La aplicación está disponible a través del siguiente enlace: https://wooflaf.shinyapps.io/ruidoruzafa/
 
 ```{r shiny-data, include = F}
+ultimo_dia_mes <- function(date){
+  as.Date(date) %m+% months(1) %m-% days(1)
+}
+
+date_df <- all_df %>%
+  group_by(entityId, street) %>%
+  complete(dateObserved = c(seq.Date(from = as.Date("2020-09-01"),
+                                     to = ultimo_dia_mes(today()),
+                                     by = "day"))) %>%
+  mutate(year = year(dateObserved),
+         month = month(dateObserved, label = T, abbr = F),
+         weekdayf = factor(wday(dateObserved, label = T,
+                                week_start = 1, abbr = F), ordered = T),
+         monthweek = ceiling(day(dateObserved) / 7)) %>%
+  pivot_longer(starts_with("LAeq"), 
+               names_to = "medida", 
+               values_to = "valor") %>%
+  mutate(text = ifelse(is.na(valor),
+                       paste0("Fecha: ", day(dateObserved)," de ",
+                              month(dateObserved, label = T, abbr = F), " \n",
+                              "No hay registro de este día"),
+                       paste0("Valor: ", valor, " dB\n", "Fecha: ",
+                              day(dateObserved)," de ",
+                              month(dateObserved, label = T, abbr = F), " \n",
+                              "Día: ", str_to_title(weekdayf), " \n")))
+
 # Guardamos las variables que serán utilizadas en la aplicación Shiny en un .RData que posteriormente cargaremos.
-save(list = c("ids", "all_df", "hosteleria", "all_df_ubi_median"),
+save(list = c("ids", "all_df", "hosteleria", "all_df_ubi_median", "date_df"),
      file = "./RuidoRuzafaShiny/data/data.RData")
 ```
