@@ -7,13 +7,15 @@ Es fácil pensar que los datos variarán a lo largo del tiempo, pero, ¿se aprec
 Comenzemos por ver qué ruido presentan los diferentes meses con una gráfica.
 
 ```{r}
+# Generamos una tabla con la información relevante
 medias<-complete_data %>%
   mutate(Mes = as.character(month(dateObserved))) %>%
   mutate(Mes = factor(Mes, ordered = T, levels = c("1","2","3","4","5","6","7","8","9","10","11","12"), labels = c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"))) %>%
   group_by(Mes) %>%
-  summarise(Media_Mes_Dia = mean(LAeq, na.rm = T),
-            Media_Mes_Noche = mean(LAeq_d, na.rm = T))
+  summarise(Media_Mes_Noche = mean(LAeq_d, na.rm = T),
+            Media_Mes_Dia = mean(LAeq, na.rm = T))
 
+# Primer ploteo
 medias %>%
   ggplot(mapping = aes(x = Mes, y = Media_Mes_Dia)) +
   geom_line(aes(group=1, fill = "black"), size=1) +
@@ -21,7 +23,8 @@ medias %>%
   ggtitle("Ruido medio de día por mes") +
   ylab("Ruido de día") +
   theme(axis.text.x=element_text(angle=90), legend.position = "none")
-  
+
+# Segundo ploteo
 medias %>%
   ggplot(mapping = aes(x = Mes, y = Media_Mes_Noche)) +
   geom_line(aes(group=1, fill = "black"), size=1) +
@@ -29,23 +32,23 @@ medias %>%
   ggtitle("Ruido medio de noche por mes") +
   ylab("Ruido de noche") +
   theme(axis.text.x=element_text(angle=90), legend.position = "none")
-
 ```
 
-Como se puede observar, ambos gráficos tienen una forma muy parecida, con dos picos destacables en marzo y septiembre.
+Como se puede observar, ambos gráficos tienen una forma muy parecida, con dos picos destacables en marzo y septiembre. Realmente, no existen diferencias notables considerando esta división de los datos más que las medias de noche son ligeramente más altas que las de día. Por lo parecidas que son las dos gráficas, veremos más clara esta pequeña diferencia de otra manera.
 
 Ahora visualizaremos los datos en forma de tabla.
 
 ```{r}
 medias %>%
+  mutate(Diferencia = Media_Mes_Noche - Media_Mes_Dia) %>%
   kable()
 ```
 
 ## El efecto de las medidas del Covid-19
 
-Des de el comienzo de la pandemia se han adoptado una serie de medidas de excepción que, especialmente durante los Estados de Alarma y el confinamiento, redujeron drásticamente la movilidad. Entre las fechas registradas en el conjunto de datos se encuentran las del segundo Estado de Alarma, con lo que surje la pregunta, ¿hasta qué punto ha supuesto un impacto en los niveles de ruido?
+Desde el comienzo de la pandemia se han adoptado una serie de medidas de excepción que, especialmente durante los Estados de Alarma y el confinamiento, redujeron drásticamente la movilidad. Entre las fechas registradas en el conjunto de datos se encuentran las del segundo Estado de Alarma, con lo que surje la pregunta, ¿hasta qué punto ha supuesto un impacto en los niveles de ruido?
 
-Por las características del segundo Estado de Alarma, vamos a plantear la pregunta des de los datos nocturnos. Con el objetivo de obtener respuestas realizaremos unos gráficos representativos dónde podamos ver visualmente la diferencia.
+Por las características del segundo Estado de Alarma y su impacto en la vida nocturna, vamos a plantear la pregunta desde estos datos en particular. Con el objetivo de obtener respuestas realizaremos unos gráficos representativos dónde podamos ver visualmente la diferencia.
 
 ```{r}
 dates_vline<-ymd(c("2020-10-25", "2021-05-09"))
@@ -53,6 +56,7 @@ dates_vline<-ymd(c("2020-10-25", "2021-05-09"))
 
 relevantes <- c("carlescervera_reina", "vivons", "salvador")
 
+# Ploteos
 for(calle in relevantes){
   print(ggplot(complete_data %>% 
           filter(street == calle), aes(x = dateObserved, y = LAeq_n)) +
@@ -69,7 +73,9 @@ for(calle in relevantes){
           ylim(40,90))}
 ```
 
-A continuación creamos una tabla resumen que sirva para hacernos una idea de todos los sensores.
+Como se puede apreciar, los registros de sonido comprendidos entre el inicio y el fin del Estado de Alarma son notablemente más bajos que durante el resto del tiempo. Así pues, podemos ver que, en efecto, las medidas contra la Covid tuvieron un claro efecto en los niveles de ruido nocturnos.
+
+A continuación creamos una tabla resumen que sirva para hacernos una idea numérica de todos los sensores.
 
 ```{r}
 e_alarma<-complete_data %>%
@@ -118,7 +124,9 @@ for(calle in relevantes){
           ylim(40,90))}
 ```
 
-Como se había hecho anteriormente, vamos a organizar la información relevante en una tabla con todas los sensores.
+Como muestran los gráficos, hay un pico muy importante de sonido en torno a Fallas, aunque la tendencia ya era ascendente pocos días antes. Estos valores tan elevados sin duda se deben a las actividades fiesteras. No sería hasta unos días después que se recuperarían los niveles de sonido normales en torno a ese período de tiempo.
+
+Como se ha hecho anteriormente, vamos a organizar la información relevante en una tabla con todas los sensores.
 
 ```{r}
 fallas<-complete_data %>%
